@@ -19,7 +19,7 @@ const CryptoDetails = ({ cryptoId }) => {
   }, [cryptoId]);
 
   if (!cryptoDetails) {
-    return 
+    return
   }
 
   const {
@@ -53,33 +53,34 @@ const CryptoDetails = ({ cryptoId }) => {
       <p>Genesis Date: {genesis_date}</p>
       <p>Categories: {categories.join(', ')}</p>
       <p>Description: {description.en}</p>
-      <p>Links:</p>
-      <ul>
-        {links.homepage.map((link, index) => (
-          <li key={index}>
-            <a href={link} target="_blank" rel="noopener noreferrer">
-              {link}
-            </a>
-          </li>
-        ))}
+
       <p>Community Data:</p>
       <ul>
         <li>Facebook Likes: {community_data.facebook_likes}</li>
         <li>Twitter Followers: {community_data.twitter_followers}</li>
         {/* Adicione mais dados da comunidade conforme necessário */}
-      </ul>
-      <p>Developer Data:</p>
-      <ul>
-        <li>Stars on GitHub: {developer_data.stars}</li>
-        <li>Subscribers on Reddit: {developer_data.subscribers}</li>
-        {/* Adicione mais dados de desenvolvedores conforme necessário */}
-      </ul>
-      <p>Public Interest Stats:</p>
-      <ul>
-        <li>Alexa Rank: {public_interest_stats.alexa_rank}</li>
-        {/* Adicione mais estatísticas de interesse público conforme necessário */}
-      </ul>
-      {/* Adicione mais detalhes conforme necessário */}
+
+        <p>Developer Data:</p>
+        <ul>
+          <li>Stars on GitHub: {developer_data.stars}</li>
+          <li>Subscribers on Reddit: {developer_data.subscribers}</li>
+          {/* Adicione mais dados de desenvolvedores conforme necessário */}
+        </ul>
+        <p>Public Interest Stats:</p>
+        <ul>
+          <li>Alexa Rank: {public_interest_stats.alexa_rank}</li>
+          {/* Adicione mais estatísticas de interesse público conforme necessário */}
+        </ul>
+        <p>Links:</p>
+        <ul>
+          {links.homepage.map((link, index) => (
+            <li key={index}>
+              <a href={link} target="_blank" rel="noopener noreferrer">
+                {link}
+              </a>
+            </li>
+          ))}
+        </ul>
       </ul>
     </div>
   );
