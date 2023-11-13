@@ -3,42 +3,42 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   text-align: center;
   background-color: #333;
   color: #fff;
-  padding: 10px 20px; /* Adicionado padding */
+  padding: 10px 20px;
 }
 
-.logo img {
+.header .logo img {
   width: 40px;
 }
 
-.links-container {
+.header .links-container {
   display: flex;
   text-align: center;
 }
 
-.nav ul {
+.header .nav ul {
   list-style: none;
   display: flex;
-  margin: 0; /* Removido o margin padrão */
+  margin: 0;
 }
 
-.nav li {
-  margin-right: 20px; /* Espaçamento entre os itens do menu */
+.header .nav li {
+  margin-right: 20px;
 }
 
-.nav a {
+.header .nav a {
   text-decoration: none;
   color: #fff;
-  font-size: 18px; /* Tamanho da fonte ajustado */
-  transition: color 0.3s; /* Adicionado transição de cor para suavizar o efeito */
+  font-size: 18px;
+  transition: color 0.3s;
 }
 
 /* Efeito de hover para os links do menu */
-.nav a:hover {
-  color: #ffcc00; /* Cor desejada ao passar o mouse (pode ser ajustada) */
+.header .nav a:hover {
+  color: #ffcc00;
 }
 
 /* Adaptação para telas menores que 768px (tablets) */
@@ -48,21 +48,21 @@
     padding: 10px;
   }
 
-  .nav {
+  .header .nav {
     margin-top: 10px;
   }
 
-  .nav ul {
+  .header .nav ul {
     flex-direction: column;
     align-items: center;
   }
 
-  .nav li {
+  .header .nav li {
     margin: 0;
     margin-bottom: 10px;
   }
 
-  .login {
+  .header .login {
     margin-top: 10px;
   }
 }
