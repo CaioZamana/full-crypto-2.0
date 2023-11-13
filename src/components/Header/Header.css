@@ -1,0 +1,68 @@
+/* Header.css */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px; /* Adicionado padding */
+}
+
+.logo img {
+  width: 40px;
+}
+
+.links-container {
+  display: flex;
+  text-align: center;
+}
+
+.nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0; /* Removido o margin padrão */
+}
+
+.nav li {
+  margin-right: 20px; /* Espaçamento entre os itens do menu */
+}
+
+.nav a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 18px; /* Tamanho da fonte ajustado */
+  transition: color 0.3s; /* Adicionado transição de cor para suavizar o efeito */
+}
+
+/* Efeito de hover para os links do menu */
+.nav a:hover {
+  color: #ffcc00; /* Cor desejada ao passar o mouse (pode ser ajustada) */
+}
+
+/* Adaptação para telas menores que 768px (tablets) */
+@media only screen and (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .nav {
+    margin-top: 10px;
+  }
+
+  .nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav li {
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+  .login {
+    margin-top: 10px;
+  }
+}

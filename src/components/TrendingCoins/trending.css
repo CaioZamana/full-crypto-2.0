@@ -1,0 +1,34 @@
+/* styles.css */
+.trending-coins-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.loading-message,
+.error-message {
+  font-size: 18px;
+  color: #ff0000;
+  text-align: center;
+}
+
+.coin-list {
+  list-style: none;
+  padding: 0;
+}
+
+.coin-item {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  transition: transform 0.2s;
+}
+
+.coin-item:hover {
+  transform: scale(1.02);
+}
+
+.coin-item strong {
+  margin-right: 10px;
+  font-size: 18px;
+}

@@ -1,0 +1,35 @@
+/* style.css for ChartPage */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+a {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #007bff; /* Set your desired link color */
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos para o gráfico ocupar 100% da tela */
+.chart-container {
+    width: 100%;
+    height: 100vh; /* 100% da altura da tela */
+}
+
+/* Estilos para celulares com largura de 480px */
+@media (max-width: 480px) {
+    body {
+        font-size: 14px; /* Tamanho de fonte menor para celulares */
+    }
+
+    a {
+        margin-bottom: 10px; /* Menor margem inferior para celulares */
+    }
+}
