@@ -61,7 +61,9 @@ const CryptoDetails = ({ cryptoId }) => {
 
       {/* Additional information from CryptoDetails component */}
       <h2>{name}</h2>
+      <p>Site Oficial: <a href={links.homepage[0]} target="_blank" rel="noopener noreferrer">{links.homepage[0]}</a></p>
       <img src={image?.large} alt={`${name} Logo`} style={{ maxWidth: '100px' }} />
+
       <p>Symbol: {symbol}</p>
       <p>Preço Atual: {formatCurrency(current_price.usd)}</p>
       <p>Capitalização de Mercado: {formatCurrency(market_cap.usd)}</p>
@@ -104,11 +106,8 @@ const CryptoDetails = ({ cryptoId }) => {
       {/* Additional information from CryptoDetailsCard component */}
 
       {/* Additional information from CryptoDetailsCard component */}
-      {ath && <p>Porcentagem em relação à ATH: {calculatePercentage(current_price.usd, ath.usd)}%</p>}
-      {atl && <p>Porcentagem em relação à ATL: {calculatePercentage(current_price.usd, atl.usd)}%</p>}
 
       {/* Additional information from CryptoDetailsCard component */}
-      <p>Site Oficial: <a href={links.homepage[0]} target="_blank" rel="noopener noreferrer">{links.homepage[0]}</a></p>
 
       {/* Additional information from CryptoDetailsCard component */}
       <button onClick={closeModal}>Fechar</button>
