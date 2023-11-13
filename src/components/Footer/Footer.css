@@ -1,54 +1,56 @@
 /* Footer.css */
 
-.footer {
-    background-color: #333;
-    color: #fff;
-    margin-top: 20px;
-    padding: 20px 0;
-  }
-  
-  .footer-content {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-  }
-  
-  .footer-section {
-    flex: 1;
-    max-width: 300px;
-  }
-  
-  .footer-section h2 {
-    color: #fff;
-    border-bottom: 2px solid #fff; /* Adiciona uma linha de separação abaixo do título */
-    padding-bottom: 5px; /* Espaçamento para a linha de separação */
-  }
-  
-  .footer-section ul {
-    list-style: none;
-    padding: 0;
-  }
-  
- 
-  .footer-section a {
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.3s ease; /* Adiciona uma transição suave na mudança de cor */
-  }
-  
-  .footer-section a:hover {
-    color: #ffcc00; /* Cor diferente ao passar o mouse */
-  }
-  
-  .footer-bottom {
-    text-align: center;
-    padding: 20px;
-    background-color: #222;
-  }
-  
-  .footer-bottom p {
-    margin: 0;
-    font-size: 14px;
-    color: #fff;
-  }
-  
+body .footer {
+  background-color: #333;
+  color: #fff;
+  margin-top: 20px;
+  padding: 20px 0;
+}
+
+body .footer .footer-content {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+body .footer .footer-section {
+  flex: 1;
+  max-width: 300px;
+}
+
+body .footer .footer-section h2 {
+  color: #fff;
+  border-bottom: 2px solid #fff;
+  padding-bottom: 5px;
+}
+
+body .footer .footer-section p {
+  color: #ccc; /* Cor específica para os parágrafos dentro do footer */
+}
+
+body .footer .footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+body .footer .footer-section a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+body .footer .footer-section a:hover {
+  color: #ffcc00;
+}
+
+body .footer .footer-bottom {
+  text-align: center;
+  padding: 20px;
+  background-color: #222;
+}
+
+body .footer .footer-bottom p {
+  margin: 0;
+  font-size: 14px;
+  color: #fff;
+}
