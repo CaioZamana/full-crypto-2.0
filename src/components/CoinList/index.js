@@ -99,8 +99,8 @@ const CoinList = () => {
     <div>
       <Header />
       <div className="container">
-        <h1>Cripto List</h1>
       <SearchBar/>
+        <h1>Cripto List</h1>
         <table>
           <thead>
             <tr>
