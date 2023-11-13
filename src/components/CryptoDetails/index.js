@@ -18,7 +18,7 @@ const CryptoDetails = ({ cryptoId }) => {
   }, [cryptoId]);
 
   if (!cryptoDetails) {
-    return <div>Loading...</div>;
+    return 
   }
 
   const {
