@@ -1,0 +1,68 @@
+/* CryptoDetails.css */
+
+.crypto-details-container {
+    font-family: 'Arial', sans-serif;
+    background-color: #f3f3f3;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  h2 {
+    color: #333;
+  }
+  
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li a {
+    color: #007bff;
+    text-decoration: none;
+    word-break: break-all;
+  }
+  
+  li a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Style para a seção "Links" */
+  .links-list {
+    margin-bottom: 20px;
+  }
+  
+  .links-list li {
+    margin-bottom: 10px;
+  }
+  
+  /* Style para as seções "Community Data", "Developer Data" e "Public Interest Stats" */
+  .data-section {
+    margin-bottom: 20px;
+  }
+  
+  .data-section h3 {
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .data-section ul {
+    margin-top: 0;
+  }
+  
+  .data-section li {
+    margin-bottom: 10px;
+  }
+  

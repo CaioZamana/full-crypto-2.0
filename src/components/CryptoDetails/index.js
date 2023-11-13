@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './CryptoDetails.css';
 
 const CryptoDetails = ({ cryptoId }) => {
   const [cryptoDetails, setCryptoDetails] = useState(null);
@@ -61,7 +62,6 @@ const CryptoDetails = ({ cryptoId }) => {
             </a>
           </li>
         ))}
-      </ul>
       <p>Community Data:</p>
       <ul>
         <li>Facebook Likes: {community_data.facebook_likes}</li>
@@ -80,6 +80,7 @@ const CryptoDetails = ({ cryptoId }) => {
         {/* Adicione mais estatísticas de interesse público conforme necessário */}
       </ul>
       {/* Adicione mais detalhes conforme necessário */}
+      </ul>
     </div>
   );
 };
