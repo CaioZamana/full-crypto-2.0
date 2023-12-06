@@ -90,7 +90,7 @@ const CoinList = () => {
     { key: 'symbol', label: 'Símbolo' },
     { key: 'current_price', label: 'Preço (USD)' },
     { key: 'market_cap', label: 'Cap. de Mercado' },
-    { key: 'total_volume', label: 'Volume Total (USDT/24hs)' },
+    { key: 'total_volume', label: 'Volume (USDT/24hs)' },
     { key: 'ath_change_percentage', label: 'ATH (%)' },
     { key: 'atl_change_percentage', label: 'ATL (%)' },
   ];
@@ -99,7 +99,7 @@ const CoinList = () => {
     <div>
       <Header />
       <div className="container">
-      <SearchBar/>
+        <SearchBar />
         <h1>Cripto List</h1>
         <table>
           <thead>
@@ -121,10 +121,12 @@ const CoinList = () => {
                   <td key={column.key}>
                     {column.key === 'current_price'
                       ? crypto[column.key].toLocaleString('pt-BR', {
-                          style: 'currency',
-                          currency: 'USD',
-                        })
-                      : crypto[column.key].toLocaleString('pt-BR')}
+                        style: 'currency',
+                        currency: 'USD',
+                      })
+                      : column.key === 'ath_change_percentage' || column.key === 'atl_change_percentage'
+                        ? `${crypto[column.key].toFixed(2).toLocaleString('pt-BR')}%`
+                        : crypto[column.key].toLocaleString('pt-BR')}
                   </td>
                 ))}
                 <td>

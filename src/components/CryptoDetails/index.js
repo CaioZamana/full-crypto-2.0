@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './CryptoDetails.css';
 
+const CryptoInfoBox = ({ title, content }) => (
+  <div className="info-box">
+    <h3>{title}</h3>
+    {content}
+  </div>
+);
+
 const CryptoDetails = ({ cryptoId }) => {
   const [cryptoDetails, setCryptoDetails] = useState(null);
 
@@ -26,19 +33,7 @@ const CryptoDetails = ({ cryptoId }) => {
     return null; // or render a loading indicator
   }
 
-  const {
-    name,
-    symbol,
-    market_data: { current_price, market_cap, total_volume, ath, atl, high_24h, low_24h, price_change_percentage_24h, },
-    image,
-    description,
-    links,
-    categories,
-    genesis_date,
-    community_data,
-    developer_data,
-    public_interest_stats,
-  } = cryptoDetails;
+
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -57,60 +52,67 @@ const CryptoDetails = ({ cryptoId }) => {
 
  
   return (
-    <div>
-
-      {/* Additional information from CryptoDetails component */}
-      <h2>{name}</h2>
-      <p>Site Oficial: <a href={links.homepage[0]} target="_blank" rel="noopener noreferrer">{links.homepage[0]}</a></p>
-      <img src={image?.large} alt={`${name} Logo`} style={{ maxWidth: '100px' }} />
-
-      <p>Symbol: {symbol}</p>
-      <p>Preço Atual: {formatCurrency(current_price.usd)}</p>
-      <p>Capitalização de Mercado: {formatCurrency(market_cap.usd)}</p>
-      <p>Volume de 24h: {formatCurrency(total_volume.usd)}</p>
-      <p>Variação de 24h: {price_change_percentage_24h.toFixed(2)}%</p>
-      <p>Máx. de 24h: {formatCurrency(high_24h.usd)}</p>
-      <p>Mín. de 24h: {formatCurrency(low_24h.usd)}</p>
-      <p>All-Time High (ATH): {formatCurrency(ath?.usd || 0)} ({ath ? calculatePercentage(current_price.usd, ath.usd) : 'N/A'}%)</p>
-      <p>All-Time Low (ATL): {formatCurrency(atl?.usd || 0)} ({atl ? calculatePercentage(current_price.usd, atl.usd) : 'N/A'}%)</p>
-      <p>Genesis Date: {genesis_date}</p>
-      <p>Fornecimento Circulante: {formatNumber(cryptoDetails.market_data.circulating_supply)} {symbol}</p>
-      <p>Fornecimento Total: {formatNumber(cryptoDetails.market_data.total_supply)} {symbol}</p>
-      <p>Categories: {categories.join(', ')}</p>
-      <p>Description: {description.en}</p>
-
-      <p>Community Data:</p>
-      <ul>
-        <li>Facebook Likes: {community_data.facebook_likes}</li>
-        <li>Twitter Followers: {community_data.twitter_followers}</li>
-        {/* Add more community data as needed */}
-      </ul>
-
-      <p>Developer Data:</p>
-      <ul>
-        <li>Stars on GitHub: {developer_data.stars}</li>
-        <li>Subscribers on Reddit: {developer_data.subscribers}</li>
-        {/* Add more developer data as needed */}
-      </ul>
-
-      <p>Public Interest Stats:</p>
-      <ul>
-        <li>Alexa Rank: {public_interest_stats.alexa_rank}</li>
-        {/* Add more public interest stats as needed */}
-      </ul>
-
-           {/* Additional information from CryptoDetailsCard component */}
-
-      {/* Additional information from CryptoDetailsCard component */}
-
-      {/* Additional information from CryptoDetailsCard component */}
-
-      {/* Additional information from CryptoDetailsCard component */}
-
-      {/* Additional information from CryptoDetailsCard component */}
-
-      {/* Additional information from CryptoDetailsCard component */}
+    <div className="crypto-details-container">
       <button onClick={closeModal}>Fechar</button>
+
+      <div className="header">
+        <h2>{cryptoDetails.name} ({cryptoDetails.symbol})</h2>
+        <img src={cryptoDetails.image?.large} alt={`${cryptoDetails.name} Logo`} />
+        <p>Site Oficial: <a href={cryptoDetails.links?.homepage?.[0]} target="_blank" rel="noopener noreferrer">{cryptoDetails.links?.homepage?.[0]}</a></p>
+      </div>
+
+      <div className="daily-info">
+        <CryptoInfoBox title="Preço Atual" content={formatCurrency(cryptoDetails.market_data?.current_price?.usd)} />
+        <CryptoInfoBox title="Variação de 24h" content={`${cryptoDetails.market_data?.price_change_percentage_24h?.toFixed(2)}%`} />
+        <CryptoInfoBox title="Máx. de 24h" content={formatCurrency(cryptoDetails.market_data?.high_24h?.usd)} />
+        <CryptoInfoBox title="Mín. de 24h" content={formatCurrency(cryptoDetails.market_data?.low_24h?.usd)} />
+        <CryptoInfoBox title="Genesis Date" content={cryptoDetails.genesis_date} />
+      <CryptoInfoBox title="Categories" content={cryptoDetails.categories?.join(', ')} />
+      </div>
+
+      <div className="daily-info">
+        <CryptoInfoBox title="Capitalização de Mercado" content={formatCurrency(cryptoDetails.market_data?.market_cap?.usd)} />
+        <CryptoInfoBox title="Volume de 24h" content={formatCurrency(cryptoDetails.market_data?.total_volume?.usd)} />
+        <CryptoInfoBox title="All-Time High (ATH)" content={`${formatCurrency(cryptoDetails.market_data?.ath?.usd || 0)} (${cryptoDetails.market_data?.ath ? calculatePercentage(cryptoDetails.market_data?.current_price?.usd, cryptoDetails.market_data?.ath?.usd) : 'N/A'}%)`} />
+        <CryptoInfoBox title="All-Time Low (ATL)" content={`${formatCurrency(cryptoDetails.market_data?.atl?.usd || 0)} (${cryptoDetails.market_data?.atl ? calculatePercentage(cryptoDetails.market_data?.current_price?.usd, cryptoDetails.market_data?.atl?.usd) : 'N/A'}%)`} />
+        <CryptoInfoBox title="Fornecimento Circulante" content={`${formatNumber(cryptoDetails.market_data?.circulating_supply)} ${cryptoDetails.symbol}`} />
+        <CryptoInfoBox title="Fornecimento Total" content={`${formatNumber(cryptoDetails.market_data?.total_supply)} ${cryptoDetails.symbol}`} />
+      </div>
+
+      <CryptoInfoBox title="Description" content={cryptoDetails.description?.en} />
+
+      <div className="additional-info">
+      </div>
+
+      <div className='daily-info'>
+        <div className="community-info">
+          <CryptoInfoBox title="Community Data" content={
+            <ul>
+              <li>Facebook Likes: {cryptoDetails.community_data?.facebook_likes}</li>
+              <li>Twitter Followers: {cryptoDetails.community_data?.twitter_followers}</li>
+
+            </ul>
+          } />
+        </div>
+
+        <div className="developer-info">
+          <CryptoInfoBox title="Developer Data" content={
+            <ul>
+              <li>Stars on GitHub: {cryptoDetails.developer_data?.stars}</li>
+              <li>Subscribers on Reddit: {cryptoDetails.developer_data?.subscribers}</li>
+            </ul>
+          } />
+        </div>
+
+        <div className="public-interest-info">
+          <CryptoInfoBox title="Public Interest Stats" content={
+            <ul>
+              <li>Alexa Rank: {cryptoDetails.public_interest_stats?.alexa_rank}</li>
+            </ul>
+
+          } />
+        </div>
+      </div>
     </div>
   );
 };
