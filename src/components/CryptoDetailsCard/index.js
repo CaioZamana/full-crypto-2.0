@@ -40,16 +40,15 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
       <div className="header">
         <h2>{cryptoDetails.name} ({cryptoDetails.symbol})</h2>
         <img src={cryptoDetails.image?.large} alt={`${cryptoDetails.name} Logo`} />
-        <p>Site Oficial: <a href={cryptoDetails.links?.homepage?.[0]} target="_blank" rel="noopener noreferrer">{cryptoDetails.links?.homepage?.[0]}</a></p>
+        <h4>Site Oficial: <a href={cryptoDetails.links?.homepage?.[0]} target="_blank" rel="noopener noreferrer">{cryptoDetails.links?.homepage?.[0]}</a></h4>
       </div>
-
       <div className="daily-info">
         <CryptoInfoBox title="Preço Atual" content={formatCurrency(cryptoDetails.market_data?.current_price?.usd)} />
         <CryptoInfoBox title="Variação de 24h" content={`${cryptoDetails.market_data?.price_change_percentage_24h?.toFixed(2)}%`} />
         <CryptoInfoBox title="Máx. de 24h" content={formatCurrency(cryptoDetails.market_data?.high_24h?.usd)} />
         <CryptoInfoBox title="Mín. de 24h" content={formatCurrency(cryptoDetails.market_data?.low_24h?.usd)} />
         <CryptoInfoBox title="Volume de 24h" content={formatCurrency(cryptoDetails.market_data?.total_volume?.usd)} />
-      <CryptoInfoBox title="Categories" content={cryptoDetails.categories?.join(', ')} />
+        <CryptoInfoBox title="Categories" content={cryptoDetails.categories?.join(', ')} />
       </div>
 
       <div className="daily-info">
@@ -94,7 +93,24 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
 
           } />
         </div>
+
       </div>
+      <p>Site Oficial:</p> <a href={cryptoDetails.links?.homepage?.[0]} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }} >{cryptoDetails.links?.homepage?.[0]}</a>
+
+      <p>Subreddit:</p>
+       <a href={cryptoDetails.links?.subreddit_url} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>{cryptoDetails.links?.subreddit_url}</a>
+      <p>Blockchain Site:</p>
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        {cryptoDetails.links?.blockchain_site
+          .filter(site => site.trim() !== '') // Remove links vazios
+          .map((site, index) => (
+            <li key={index} style={{ marginBottom: 0 }}>
+              <a href={site} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>{site}</a>
+            </li>
+          ))}
+      </ul>
+
+
     </div>
   );
 };
