@@ -44,7 +44,7 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
 
 
       <div className="header">
-        <CryptoInfoBox title="Posição no Rank" content={cryptoDetails.market_cap_rank} />
+        <CryptoInfoBox title="Ranking Market Cap" content={cryptoDetails.market_cap_rank} />
         <h2>        {cryptoDetails.name} ({cryptoDetails.symbol})</h2>
         <h4>Site Oficial: <a href={cryptoDetails.links?.homepage?.[0]} target="_blank" rel="noopener noreferrer">{cryptoDetails.links?.homepage?.[0]}</a></h4>
       </div>
