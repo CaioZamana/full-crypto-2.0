@@ -1,14 +1,16 @@
+// SearchBar.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import CryptoDetailsCard from '../CryptoDetailsCard';
+import CryptoDetailsCardModal from '../CryptoDetailsCardModalSearch';
 import './SearchBar.css';
+import CryptoDetailsCardModalSearch from '../CryptoDetailsCardModalSearch';
 
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [selectedCrypto, setSelectedCrypto] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  const [showCryptoDetailsCard, setShowCryptoDetailsCard] = useState(false);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -71,8 +73,7 @@ const SearchBar = ({ onSearch }) => {
       );
 
       setSelectedCrypto(response.data);
-      setShowSuggestions(false);
-      setShowCryptoDetailsCard(true);
+      setShowSuggestions(false); // Oculta a lista de sugestões ao clicar em uma moeda
     } catch (error) {
       console.error('Erro ao buscar detalhes da criptomoeda:', error);
     }
@@ -80,7 +81,6 @@ const SearchBar = ({ onSearch }) => {
 
   const handleBackButtonClick = () => {
     setSelectedCrypto(null);
-    setShowCryptoDetailsCard(false);
     setShowSuggestions(true);
   };
 
@@ -108,9 +108,10 @@ const SearchBar = ({ onSearch }) => {
           ))}
         </ul>
       )}
-      {showCryptoDetailsCard && (
-        <CryptoDetailsCard cryptoDetails={selectedCrypto} closeModal={handleBackButtonClick} />
-      )}
+      <CryptoDetailsCardModalSearch
+        cryptoDetails={selectedCrypto}
+        closeModal={handleBackButtonClick}
+      />
     </div>
   );
 };

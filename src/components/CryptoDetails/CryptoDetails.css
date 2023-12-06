@@ -1,0 +1,39 @@
+
+.crypto-details-container {
+    font-family: 'Arial', sans-serif;
+    background-color: #f3f3f3;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+  }
+  
+  h2 {
+    color: #333;
+  }
+  
+  img {
+    max-width: 100%;
+    border-radius: 4px;
+  }
+  
+  p {
+    color: #555;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li a {
+    color: #007bff;
+  }
+  
+  li a:hover {
+    text-decoration: underline;
+  }
+  
+
+  
+  .data-section h3 {
+    color: #333;
+  }
