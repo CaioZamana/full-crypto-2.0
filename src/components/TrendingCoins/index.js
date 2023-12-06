@@ -67,8 +67,9 @@ const TrendingCoins = () => {
             {trendingCoins.map((coin, index) => (
               <p>
                 <li key={coin.item.id || index} className="coin-item">
-                  <strong>{coin.item.name}</strong>({coin.item.symbol})
+                  <strong>{coin.item.name}               ({coin.item.symbol})</strong>
                   <button onClick={() => handleCoinClick(coin.item)} >Detalhar</button>
+   
                 </li>
               </p>
             ))}
