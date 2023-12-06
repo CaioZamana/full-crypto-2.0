@@ -9,6 +9,7 @@ import './trending.css';
 
 Modal.setAppElement('#root');
 
+
 const TrendingCoins = () => {
   const [trendingCoins, setTrendingCoins] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +27,9 @@ const TrendingCoins = () => {
         setLoading(false);
       } catch (error) {
         console.error('Erro ao buscar moedas de tendência:', error);
-        setError('Erro ao carregar moedas de tendência. Tente novamente mais tarde.');
+        setError(
+          'Erro ao carregar moedas de tendência. Tente novamente mais tarde.'
+        );
         setLoading(false);
       }
     };
@@ -40,7 +43,9 @@ const TrendingCoins = () => {
       const coinId = coin.id || coin.item.id;
 
       // Busca os detalhes da criptomoeda
-      const response = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinId}`);
+      const response = await axios.get(
+        `https://api.coingecko.com/api/v3/coins/${coinId}`
+      );
 
       // Define os detalhes da criptomoeda e exibe o CryptoDetailsCard
       setSelectedCoin(response.data);
@@ -57,21 +62,19 @@ const TrendingCoins = () => {
 
   return (
     <div>
-      <Header />
-      <h1>Trending Coins</h1>
-      {loading && <p>Carregando...</p>}
-      {error && <p className="error-message">{error}</p>}
+      <Header/>
       {!loading && !error && (
         <div className="trending-coins-container">
           <ul className="coin-list">
             {trendingCoins.map((coin, index) => (
-              <p>
-                <li key={coin.item.id || index} className="coin-item">
-                  <strong>{coin.item.name}               ({coin.item.symbol})</strong>
-                  <button onClick={() => handleCoinClick(coin.item)} >Detalhar</button>
-   
-                </li>
-              </p>
+              <li key={coin.item.id || index} className="coin-item">
+                <strong>
+                  {coin.item.name} ({coin.item.symbol})
+                </strong>
+                <button onClick={() => handleCoinClick(coin.item)}>
+                  Detalhar
+                </button>
+              </li>
             ))}
           </ul>
         </div>

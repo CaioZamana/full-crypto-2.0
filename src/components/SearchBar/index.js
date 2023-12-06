@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import CryptoDetailsCardModal from '../CryptoDetailsCardModalSearch';
 import './SearchBar.css';
 import CryptoDetailsCardModalSearch from '../CryptoDetailsCardModalSearch';
 
