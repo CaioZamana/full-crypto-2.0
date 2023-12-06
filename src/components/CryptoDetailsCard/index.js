@@ -48,17 +48,17 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
         <CryptoInfoBox title="Variação de 24h" content={`${cryptoDetails.market_data?.price_change_percentage_24h?.toFixed(2)}%`} />
         <CryptoInfoBox title="Máx. de 24h" content={formatCurrency(cryptoDetails.market_data?.high_24h?.usd)} />
         <CryptoInfoBox title="Mín. de 24h" content={formatCurrency(cryptoDetails.market_data?.low_24h?.usd)} />
-        <CryptoInfoBox title="Genesis Date" content={cryptoDetails.genesis_date} />
+        <CryptoInfoBox title="Volume de 24h" content={formatCurrency(cryptoDetails.market_data?.total_volume?.usd)} />
       <CryptoInfoBox title="Categories" content={cryptoDetails.categories?.join(', ')} />
       </div>
 
       <div className="daily-info">
         <CryptoInfoBox title="Capitalização de Mercado" content={formatCurrency(cryptoDetails.market_data?.market_cap?.usd)} />
-        <CryptoInfoBox title="Volume de 24h" content={formatCurrency(cryptoDetails.market_data?.total_volume?.usd)} />
         <CryptoInfoBox title="All-Time High (ATH)" content={`${formatCurrency(cryptoDetails.market_data?.ath?.usd || 0)} (${cryptoDetails.market_data?.ath ? calculatePercentage(cryptoDetails.market_data?.current_price?.usd, cryptoDetails.market_data?.ath?.usd) : 'N/A'}%)`} />
         <CryptoInfoBox title="All-Time Low (ATL)" content={`${formatCurrency(cryptoDetails.market_data?.atl?.usd || 0)} (${cryptoDetails.market_data?.atl ? calculatePercentage(cryptoDetails.market_data?.current_price?.usd, cryptoDetails.market_data?.atl?.usd) : 'N/A'}%)`} />
         <CryptoInfoBox title="Fornecimento Circulante" content={`${formatNumber(cryptoDetails.market_data?.circulating_supply)} ${cryptoDetails.symbol}`} />
         <CryptoInfoBox title="Fornecimento Total" content={`${formatNumber(cryptoDetails.market_data?.total_supply)} ${cryptoDetails.symbol}`} />
+        <CryptoInfoBox title="Genesis Date" content={cryptoDetails.genesis_date} />
       </div>
 
       <CryptoInfoBox title="Description" content={cryptoDetails.description?.en} />
