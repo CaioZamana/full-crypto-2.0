@@ -5,7 +5,6 @@ import CryptoDetailsCard from '../CryptoDetailsCard';
 import './CoinList.css';
 import Header from '../Header';
 import Footer from '../Footer';
-import SearchBar from '../SearchBar';
 
 Modal.setAppElement('#root');
 
@@ -99,7 +98,6 @@ const CoinList = () => {
     <div>
       <Header />
       <div className="container">
-        <SearchBar />
         <h1>Cripto List</h1>
         <table>
           <thead>

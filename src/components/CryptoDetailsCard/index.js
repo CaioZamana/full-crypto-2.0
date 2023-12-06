@@ -34,8 +34,12 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
   };
 
   return (
-    <div className="crypto-details-container">
-      <button onClick={closeModal}>Voltar</button>
+    <div className="xparadireita">
+      <button onClick={closeModal}>X</button>
+      <div className="additional-info">
+
+      </div>
+
 
       <div className="header">
         <h2>{cryptoDetails.name} ({cryptoDetails.symbol})</h2>
@@ -44,11 +48,12 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
       </div>
       <div className="daily-info">
         <CryptoInfoBox title="Preço Atual" content={formatCurrency(cryptoDetails.market_data?.current_price?.usd)} />
+        <CryptoInfoBox title="Posição no Rank" content={cryptoDetails.market_cap_rank} />
         <CryptoInfoBox title="Variação de 24h" content={`${cryptoDetails.market_data?.price_change_percentage_24h?.toFixed(2)}%`} />
         <CryptoInfoBox title="Máx. de 24h" content={formatCurrency(cryptoDetails.market_data?.high_24h?.usd)} />
         <CryptoInfoBox title="Mín. de 24h" content={formatCurrency(cryptoDetails.market_data?.low_24h?.usd)} />
         <CryptoInfoBox title="Volume de 24h" content={formatCurrency(cryptoDetails.market_data?.total_volume?.usd)} />
-        <CryptoInfoBox title="Categories" content={cryptoDetails.categories?.join(', ')} />
+        <CryptoInfoBox title="Genesis Date" content={cryptoDetails.genesis_date} />
       </div>
 
       <div className="daily-info">
@@ -57,10 +62,11 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
         <CryptoInfoBox title="All-Time Low (ATL)" content={`${formatCurrency(cryptoDetails.market_data?.atl?.usd || 0)} (${cryptoDetails.market_data?.atl ? calculatePercentage(cryptoDetails.market_data?.current_price?.usd, cryptoDetails.market_data?.atl?.usd) : 'N/A'}%)`} />
         <CryptoInfoBox title="Fornecimento Circulante" content={`${formatNumber(cryptoDetails.market_data?.circulating_supply)} ${cryptoDetails.symbol}`} />
         <CryptoInfoBox title="Fornecimento Total" content={`${formatNumber(cryptoDetails.market_data?.total_supply)} ${cryptoDetails.symbol}`} />
-        <CryptoInfoBox title="Genesis Date" content={cryptoDetails.genesis_date} />
       </div>
 
+      <CryptoInfoBox title="Categories" content={cryptoDetails.categories?.join(', ')} />
       <CryptoInfoBox title="Description" content={cryptoDetails.description?.en} />
+      <CryptoInfoBox title="Public Notice" content={cryptoDetails.public_notice} />
 
       <div className="additional-info">
       </div>
@@ -98,7 +104,7 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
       <p>Site Oficial:</p> <a href={cryptoDetails.links?.homepage?.[0]} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }} >{cryptoDetails.links?.homepage?.[0]}</a>
 
       <p>Subreddit:</p>
-       <a href={cryptoDetails.links?.subreddit_url} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>{cryptoDetails.links?.subreddit_url}</a>
+      <a href={cryptoDetails.links?.subreddit_url} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>{cryptoDetails.links?.subreddit_url}</a>
       <p>Blockchain Site:</p>
       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
         {cryptoDetails.links?.blockchain_site
@@ -109,7 +115,6 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
             </li>
           ))}
       </ul>
-
 
     </div>
   );

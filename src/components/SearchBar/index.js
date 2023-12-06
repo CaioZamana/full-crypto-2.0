@@ -1,14 +1,14 @@
-// SearchBar.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import CryptoDetails from '../CryptoDetails'; // Certifique-se de importar corretamente o componente CryptoDetails
+import CryptoDetailsCard from '../CryptoDetailsCard';
 import './SearchBar.css';
 
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [selectedCrypto, setSelectedCrypto] = useState(null);
-  const [showSuggestions, setShowSuggestions] = useState(true); // Estado para controlar a visibilidade da lista
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [showCryptoDetailsCard, setShowCryptoDetailsCard] = useState(false);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -38,7 +38,7 @@ const SearchBar = ({ onSearch }) => {
         );
 
         setSuggestions(filteredSuggestions.slice(0, 5));
-        setShowSuggestions(true); // Garante que as sugestões sejam exibidas quando disponíveis
+        setShowSuggestions(true);
       } catch (error) {
         console.error('Erro ao buscar sugestões:', error);
       }
@@ -71,10 +71,17 @@ const SearchBar = ({ onSearch }) => {
       );
 
       setSelectedCrypto(response.data);
-      setShowSuggestions(false); // Oculta as sugestões quando uma criptomoeda é clicada
+      setShowSuggestions(false);
+      setShowCryptoDetailsCard(true);
     } catch (error) {
       console.error('Erro ao buscar detalhes da criptomoeda:', error);
     }
+  };
+
+  const handleBackButtonClick = () => {
+    setSelectedCrypto(null);
+    setShowCryptoDetailsCard(false);
+    setShowSuggestions(true);
   };
 
   return (
@@ -88,7 +95,7 @@ const SearchBar = ({ onSearch }) => {
       <button className="search-button" onClick={handleSearch}>
         Buscar
       </button>
-      {showSuggestions && ( // Renderiza a lista de sugestões apenas se showSuggestions for verdadeiro
+      {showSuggestions && (
         <ul className="suggestions-list">
           {suggestions.map((coin) => (
             <li
@@ -101,7 +108,9 @@ const SearchBar = ({ onSearch }) => {
           ))}
         </ul>
       )}
-      <CryptoDetails cryptoId={selectedCrypto?.id} />
+      {showCryptoDetailsCard && (
+        <CryptoDetailsCard cryptoDetails={selectedCrypto} closeModal={handleBackButtonClick} />
+      )}
     </div>
   );
 };

@@ -3,6 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
+import SearchBar from '../SearchBar';
 
 
 const Header = () => {
@@ -29,6 +30,7 @@ const Header = () => {
                     </ul>
                 </div>
             </nav>
+                        <SearchBar/>
             <div className="login">
                 {/* Seu conteúdo de login aqui */}
             </div>
