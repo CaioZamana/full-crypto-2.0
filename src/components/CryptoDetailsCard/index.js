@@ -32,23 +32,24 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
   const formatNumber = (value) => {
     return new Intl.NumberFormat('pt-BR').format(value);
   };
-
+  
   return (
     <div className="xparadireita">
       <button onClick={closeModal}>X</button>
       <div className="additional-info">
+      <img src={cryptoDetails.image?.large} alt={`${cryptoDetails.name} Logo`} />
 
       </div>
+        <br></br>
 
 
       <div className="header">
-        <h2>{cryptoDetails.name} ({cryptoDetails.symbol})</h2>
-        <img src={cryptoDetails.image?.large} alt={`${cryptoDetails.name} Logo`} />
+        <CryptoInfoBox title="Posição no Rank" content={cryptoDetails.market_cap_rank} />
+        <h2>        {cryptoDetails.name} ({cryptoDetails.symbol})</h2>
         <h4>Site Oficial: <a href={cryptoDetails.links?.homepage?.[0]} target="_blank" rel="noopener noreferrer">{cryptoDetails.links?.homepage?.[0]}</a></h4>
       </div>
       <div className="daily-info">
         <CryptoInfoBox title="Preço Atual" content={formatCurrency(cryptoDetails.market_data?.current_price?.usd)} />
-        <CryptoInfoBox title="Posição no Rank" content={cryptoDetails.market_cap_rank} />
         <CryptoInfoBox title="Variação de 24h" content={`${cryptoDetails.market_data?.price_change_percentage_24h?.toFixed(2)}%`} />
         <CryptoInfoBox title="Máx. de 24h" content={formatCurrency(cryptoDetails.market_data?.high_24h?.usd)} />
         <CryptoInfoBox title="Mín. de 24h" content={formatCurrency(cryptoDetails.market_data?.low_24h?.usd)} />
