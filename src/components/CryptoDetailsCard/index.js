@@ -12,7 +12,7 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
   if (!cryptoDetails) {
     return (
       <div className="crypto-details-container">
-        <button onClick={closeModal}>Fechar</button>
+        <button onClick={closeModal}>Voltar</button>
         <p>Detalhes da criptomoeda não disponíveis.</p>
       </div>
     );
@@ -35,7 +35,7 @@ const CryptoDetailsCard = ({ cryptoDetails, closeModal }) => {
 
   return (
     <div className="crypto-details-container">
-      <button onClick={closeModal}>Fechar</button>
+      <button onClick={closeModal}>Voltar</button>
 
       <div className="header">
         <h2>{cryptoDetails.name} ({cryptoDetails.symbol})</h2>
