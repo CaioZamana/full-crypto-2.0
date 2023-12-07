@@ -78,10 +78,10 @@ function BTCPage() {
                 Mayer Multiple Indicator Chart
               </td>
               <td>
-                <a href="https://react-portfolio-ranking-chart.vercel.app/" target="_blank" rel="noreferrer">
+                <a href="../PortfolioPage" target="_blank" rel="noreferrer">
                   <img src={chartImage} alt="Produto 1" />
                 </a>
-                Your Portfolio, Chart, and Ranking
+                Your Portfolio
               </td>
           </tr>
           <tr>
