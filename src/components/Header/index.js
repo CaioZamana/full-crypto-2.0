@@ -1,10 +1,7 @@
-// Header.js
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
 import SearchBar from '../SearchBar';
-
 
 const Header = () => {
     return (
@@ -21,7 +18,6 @@ const Header = () => {
                         <li><Link to="/PortfolioPage">Portfólio</Link></li>
                         <li><Link to="/MarketExplorer">Corretoras Cripto</Link></li>
                         <li><Link to="/btc">Indicadores Bitcoin</Link></li>
-                        <li><Link to="/btc">Estratégias</Link></li>
                         <li><Link to="/CoinMultList">Listas Cripto</Link></li>
                         <li><Link to="/CryptoConverter">Conversor Cripto</Link></li>
                         <li><Link to="/About">Sobre Nós</Link></li>
@@ -30,10 +26,10 @@ const Header = () => {
                     </ul>
                 </div>
             </nav>
-                        <SearchBar/>
             <div className="login">
                 {/* Seu conteúdo de login aqui */}
             </div>
+            <div className='search-bar-container'><SearchBar/></div>
         </header>
     );
 };

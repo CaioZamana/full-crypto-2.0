@@ -1,14 +1,48 @@
 /* MarketInfo.css */
 
 .market-info {
-    margin-top: 20px;
-  }
-  
-  h2 {
-    text-align: center;
-  }
-  
-  button {
-    margin-bottom: 10px;
-  }
-  
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.market-info h2 {
+  text-align: center;
+}
+
+.market-info button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.market-info button:hover {
+  background-color: #2980b9;
+}
+
+/* Estilo para as informações dentro da caixa */
+.market-info div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.market-info p {
+  flex-basis: calc(50% - 20px);
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Adicione sombra e destaque no hover */
+.market-info p:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
