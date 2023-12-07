@@ -22,17 +22,28 @@
 .market-list ul {
   list-style-type: none;
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
   
 }
 
 .market-list li {
   cursor: pointer;
-  padding: 5px;
-  border-bottom: 1px solid #ddd;
-  transition: background-color 0.3s;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: calc(33.33% - 20px); /* Defina a largura para ocupar cerca de um terço do contêiner, ajuste conforme necessário */
   box-sizing: border-box;
+  transition: background-color 0.3s;
   
 }
+
+.market-list li.selected {
+  background-color: #3498db;
+  color: #fff;
+}
+
 
 .market-list li:hover {
   background-color: #f2f2f2;

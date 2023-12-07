@@ -23,7 +23,6 @@ import CoinDetails from './components/CoinDetails/CoinDetails';
 function App() {
   return (
     <div>
-
       <Router>
         <Routes>
           <Route path="/TrendingCoins" element={<TrendingCoins/>} />
