@@ -1,0 +1,33 @@
+/* CountdownTimer.css */
+
+.countdown-container {
+    text-align: center;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.countdown-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.countdown-container .countdown-section {
+    border: 2px solid #ccc; /* Adiciona uma borda sólida de 2px com cor cinza */
+    
+    display: inline-block;
+    padding: 30px;
+    margin: 10px; /* Espaçamento entre as seções do contador */
+}
+
+.countdown-container .countdown-section span {
+    display: block;
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff; /* Cor azul para dias, minutos, etc. */
+}
+
+.countdown-container .countdown-section span.label {
+    font-size: 14px;
+    color: #555;
+}

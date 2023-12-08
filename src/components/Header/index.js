@@ -20,6 +20,7 @@ const Header = () => {
                         <li><Link to="/btc">Indicadores Bitcoin</Link></li>
                         <li><Link to="/CoinMultList">Listas Cripto</Link></li>
                         <li><Link to="/CryptoConverter">Conversor Cripto</Link></li>
+                        <li><Link to="/CountdownTimer">Cronometro Halving</Link></li>
                         <li><Link to="/About">Sobre Nós</Link></li>
                         <li><Link to="/ContactPage">Contato</Link></li>
 

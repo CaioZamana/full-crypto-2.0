@@ -19,6 +19,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import CryptoConverter from './components/CryptoConverter';
 import TrendingCoins from './components/TrendingCoins';
 import CoinDetails from './components/CoinDetails/CoinDetails';
+import CountdownTimer from './components/CountdownTimer';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/btc" element={<BTCPage />} />
           <Route path='/PrivacyPolicy' element={<PrivacyPolicy />} />
           <Route path='/CryptoConverter' element={<CryptoConverter />} />
+          <Route path="/CountdownTimer" element={<CountdownTimer/>}/>
         </Routes>
       </Router>
     </div>
