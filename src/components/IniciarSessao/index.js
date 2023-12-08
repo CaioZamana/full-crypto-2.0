@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom'; // Importe o ReactDOM
-import './IniciarSessao.css'; // Importe o arquivo CSS para estilização
+import ReactDOM from 'react-dom';
+import './IniciarSessao.css';
 
 const IniciarSessao = () => {
   const [mostrarCard, setMostrarCard] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState('');
 
   const toggleCard = () => {
     setMostrarCard(!mostrarCard);
@@ -18,22 +20,25 @@ const IniciarSessao = () => {
 
   const handleLoginOrCadastro = () => {
     if (isLogin) {
-      // Lógica para autenticar o usuário
       console.log('Autenticando usuário:', username, password);
     } else {
-      // Lógica para cadastrar o usuário
-      console.log('Cadastrando usuário:', username, password);
+      if (password === confirmPassword) {
+        console.log('Cadastrando usuário:', username, password, email);
+      } else {
+        console.error('As senhas não coincidem.');
+      }
     }
   };
 
-  // Renderizar o card no body quando mostrarCard for verdadeiro
   if (mostrarCard) {
     return ReactDOM.createPortal(
       <div className="iniciar-sessao-card">
         <div className="iniciar-sessao-content">
-          <span className="iniciar-sessao-close-btn" onClick={toggleCard}>&times;</span>
+          <span className="iniciar-sessao-close-btn" onClick={toggleCard}>
+            &times;
+          </span>
           <div className="iniciar-sessao-form-container">
-            <h2>{isLogin ? 'Login' : 'Cadastro'}</h2>
+            <h2>{isLogin ? 'Login' : 'Cadastre-se'}</h2>
             <input
               type="text"
               placeholder="Usuário"
@@ -46,6 +51,22 @@ const IniciarSessao = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            {!isLogin && (
+              <>
+                <input
+                  type="password"
+                  placeholder="Confirmar Senha"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <input
+                  type="email"
+                  placeholder="E-mail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </>
+            )}
             <button onClick={handleLoginOrCadastro}>
               {isLogin ? 'Entrar' : 'Cadastrar'}
             </button>
