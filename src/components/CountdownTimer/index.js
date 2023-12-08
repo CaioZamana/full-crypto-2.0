@@ -40,7 +40,7 @@ const CountdownTimer = () => {
     return (
         <div className="countdown-container">
             <Header />
-            <h1>Contagem Regressiva para o Próximo Halving do Bitcoin</h1>
+            <h1>Contagem Regressiva aproximada para o Próximo Halving do Bitcoin</h1>
             <div className="countdown-section">
                 <span>{countdown.days}</span>
                 <span className="label">Dias</span>

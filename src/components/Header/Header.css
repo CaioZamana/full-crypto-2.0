@@ -2,6 +2,7 @@
 
 .header {
   display: flex;
+  justify-items: center;
   align-items: center;
   justify-content: space-around;
   text-align: center;
@@ -16,7 +17,7 @@
   justify-content: center;
 }
 
-.header .logo img {
+.logo img {
   width: 60px;
 }
 
@@ -37,7 +38,7 @@
 
 .header .nav li {
 
-  margin-right: 20px;
+  margin-right: 2%;
 }
 
 .header .nav a {
@@ -76,6 +77,7 @@
 .header .nav a:hover {
   color: #ffcc00;
 }
+
 
 /* Adaptação para telas menores que 768px (tablets) */
 @media only screen and (max-width: 768px) {

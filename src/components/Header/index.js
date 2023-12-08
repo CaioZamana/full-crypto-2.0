@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
 import SearchBar from '../SearchBar';
+import IniciarSessao from '../IniciarSessao';
 
 const Header = () => {
     return (
@@ -16,12 +17,12 @@ const Header = () => {
                         <li><Link to="/TrendingCoins">Tendências</Link></li>
                         <li><Link to="/TradingChart">Gráficos</Link></li>
                         <li><Link to="/PortfolioPage">Portfólio</Link></li>
-                        <li><Link to="/MarketExplorer">Corretoras Cripto</Link></li>
-                        <li><Link to="/btc">Indicadores Bitcoin</Link></li>
-                        <li><Link to="/CoinMultList">Listas Cripto</Link></li>
-                        <li><Link to="/CryptoConverter">Conversor Cripto</Link></li>
-                        <li><Link to="/CountdownTimer">Cronometro Halving</Link></li>
-                        <li><Link to="/About">Sobre Nós</Link></li>
+                        <li><Link to="/MarketExplorer">Corretoras</Link></li>
+                        <li><Link to="/btc">Indicadores</Link></li>
+                        <li><Link to="/CoinMultList">Listas</Link></li>
+                        <li><Link to="/CryptoConverter">Conversor</Link></li>
+                        <li><Link to="/CountdownTimer">Halving</Link></li>
+                        <li><Link to="/About">Sobre</Link></li>
                         <li><Link to="/ContactPage">Contato</Link></li>
 
                     </ul>
@@ -31,6 +32,7 @@ const Header = () => {
                 {/* Seu conteúdo de login aqui */}
             </div>
             <div className='search-bar-container'><SearchBar/></div>
+            <div className='iniciarsessao'><IniciarSessao/></div>
         </header>
     );
 };
