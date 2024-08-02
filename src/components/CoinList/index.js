@@ -16,17 +16,18 @@ const CoinList = () => {
   const [sortColumn, setSortColumn] = useState('market_cap_rank');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
+  const totalPages = 10; // Total de páginas
 
   useEffect(() => {
-    const fetchTop250Crypto = async () => {
+    const fetchCryptoPage = async () => {
       try {
         const response = await axios.get(
           'https://api.coingecko.com/api/v3/coins/markets',
           {
             params: {
               vs_currency: 'usd',
-              per_page: 250,
-              page: 1,
+              per_page: itemsPerPage, // Define o número de itens por página
+              page: currentPage, // Página atual
               sparkline: true,
             },
           }
@@ -40,12 +41,12 @@ const CoinList = () => {
 
         setCryptoList(sortedCryptoList);
       } catch (error) {
-        console.error('Erro ao buscar lista das top 250 criptomoedas:', error);
+        console.error('Erro ao buscar lista das criptomoedas:', error);
       }
     };
 
-    fetchTop250Crypto();
-  }, [sortColumn, sortOrder]);
+    fetchCryptoPage();
+  }, [currentPage, sortColumn, sortOrder]);
 
   const handleCryptoDetails = async (cryptoId) => {
     try {
@@ -64,13 +65,10 @@ const CoinList = () => {
     setModalIsOpen(false);
   };
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-  const totalPages = Math.ceil(cryptoList.length / itemsPerPage);
-
   const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
   };
 
   const handleSort = (columnKey) => {
@@ -113,7 +111,7 @@ const CoinList = () => {
             </tr>
           </thead>
           <tbody>
-            {cryptoList.slice(startIndex, endIndex).map((crypto) => (
+            {cryptoList.map((crypto) => (
               <tr key={crypto.id}>
                 {columns.map((column) => (
                   <td key={column.key}>
