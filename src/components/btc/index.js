@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.css';
-import realizedPriceImage from './realized-price.png';
+import piCycleTopIndicator from './Pi Cycle Top Indicator.png'
 import stockToFlowImage from './Stock-Flow.PNG';
 import tool2YearMAImage from './Tool2-YearMAMultiplier.PNG';
 import rainbowBtcImage from './RainbowBtc.PNG';
@@ -25,83 +25,83 @@ function BTCPage() {
         <tbody>
           <tr>
             <td>
-              <a href="https://www.lookintobitcoin.com/charts/realized-price/" target="_blank" rel="noreferrer">
-                <img src={realizedPriceImage} alt="BTC Realized Price" />
-              </a>
               BTC Realized Price
+              <a href="https://www.bitcoinmagazinepro.com/charts/pi-cycle-top-indicator/" target="_blank" rel="noreferrer">
+                <img src={piCycleTopIndicator} alt="Bitcoin: Pi Cycle Top Indicator" />
+              </a>
             </td>
             <td>
+              Bitcoin: Stock-to-Flow Model
               <a href="https://www.lookintobitcoin.com/charts/stock-to-flow-model/" target="_blank" rel="noreferrer">
                 <img src={stockToFlowImage} alt="Bitcoin: Stock-to-Flow Model" />
               </a>
-              Bitcoin: Stock-to-Flow Model
             </td>
             <td>
+              Bitcoin Investor Tool: 2-Year MA Multiplier
               <a href="https://www.lookintobitcoin.com/charts/bitcoin-investor-tool/" target="_blank" rel="noreferrer">
                 <img src={tool2YearMAImage} alt="Bitcoin Investor Tool: 2-Year MA Multiplier" />
               </a>
-              Bitcoin Investor Tool: 2-Year MA Multiplier
             </td>
           </tr>
           <tr>
             <td>
+              Bitcoin Rainbow Price Chart Indicator
               <a href="https://www.lookintobitcoin.com/charts/bitcoin-rainbow-chart/" target="_blank" rel="noreferrer">
                 <img src={rainbowBtcImage} alt="Bitcoin Rainbow Price Chart Indicator" />
               </a>
-              Bitcoin Rainbow Price Chart Indicator
             </td>
             <td>
+              Bitcoin relative strength index
               <a href="https://charts.bitbo.io/monthly-rsi/" target="_blank" rel="noreferrer">
                 <img src={btcRsiImage} alt="Bitcoin relative strength index" />
               </a>
-              Bitcoin relative strength index
             </td>
             <td>
+              200 Week Moving Average Heatmap
               <a href="https://www.coinglass.com/pro/i/200WMA" target="_blank" rel="noreferrer">
                 <img src={movingAverageHeatmapImage} alt="200 Week Moving Average Heatmap" />
               </a>
-              200 Week Moving Average Heatmap
             </td>
           </tr>
           <tr>
 
           <td>
+                Cycle low multiple
                 <a href="https://charts.bitbo.io/cycle-low-multiple/" target="_blank" rel="noreferrer">
                   <img src={cycleLowMultipleImage} alt="Produto 1" />
                 </a>
-                Cycle low multiple
               </td>
               <td>
+                Mayer Multiple Indicator Chart
                 <a href="https://buybitcoinworldwide.com/mayer-multiple/" target="_blank" rel="noreferrer">
                   <img src={mayerMultipleImage} alt="Produto 1" />
                 </a>
-                Mayer Multiple Indicator Chart
               </td>
               <td>
+                Your Portfolio
                 <a href="../PortfolioPage" target="_blank" rel="noreferrer">
                   <img src={chartImage} alt="Produto 1" />
                 </a>
-                Your Portfolio
               </td>
           </tr>
           <tr>
               <td>
+                Bitcoin: Top Cap
                 <a href="https://www.lookintobitcoin.com/charts/top-cap/" target="_blank" rel="noreferrer">
                   <img src={topCapImage} alt="Produto 1" />
                 </a>
-                Bitcoin: Top Cap
               </td>
               <td>
+                Bitcoin: Balanced Price
                 <a href="https://www.lookintobitcoin.com/charts/balanced-price/" target="_blank" rel="noreferrer">
                   <img src={balancedPriceImage} alt="Produto 1" />
                 </a>
-                Bitcoin: Balanced Price
               </td>
               <td>
+                Bitcoin: Terminal Price
                 <a href="https://www.lookintobitcoin.com/charts/terminal-price/" target="_blank" rel="noreferrer">
                   <img src={terminalPriceImage} alt="Produto 1" />
                 </a>
-                Bitcoin: Terminal Price
               </td>
             </tr>
         </tbody>
