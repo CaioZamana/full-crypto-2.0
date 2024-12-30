@@ -65,7 +65,7 @@ const ROICalculator = () => {
       const [mantissa, exponent] = price.toExponential(4).split("e");
       const formattedExponent = exponent.replace("-", "⁻"); // Converte o expoente para superíndice
       const decimalValue = price.toFixed(15).replace(/0+$/, ""); // Calcula o valor real do número
-      return `(${mantissa} × 10${formattedExponent}) = ${decimalValue}`;
+      return `${decimalValue} = (${mantissa} × 10${formattedExponent})`;
     }
   };
   
