@@ -78,7 +78,7 @@ const ROICalculator = () => {
 
     // Lista de projeções de 1x a 369x
     const calculatedProjections = [];
-    for (let roi = 1; roi <= 369; roi++) {
+    for (let roi = 1; roi <= 3690; roi++) {
       calculatedProjections.push({
         roi: `${roi}x`,
         price: price * roi,
@@ -119,7 +119,7 @@ const ROICalculator = () => {
 
       {/* Campo para editar o valor da banca */}
       <div style={{ margin: "20px 0" }}>
-        <label>Banca (USD): </label>
+        <label>Capital Inicial (USD): </label>
         <input
           type="number"
           value={investment}
@@ -155,9 +155,9 @@ const ROICalculator = () => {
           <thead>
             <tr style={{ backgroundColor: "#f2f2f2" }}>
               <th>ROI</th>
-              <th>Preço Projetado (USD)</th>
-              <th>Capital Projetado (USD)</th>
-              <th>Market Cap Projetado (USD)</th>
+              <th>Preço (USD)</th>
+              <th>Capital (USD)</th>
+              <th>Market Cap (USD)</th>
             </tr>
           </thead>
           <tbody>
