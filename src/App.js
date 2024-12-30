@@ -20,6 +20,7 @@ import CryptoConverter from './components/CryptoConverter';
 import TrendingCoins from './components/TrendingCoins';
 import CoinDetails from './components/CoinDetails/CoinDetails';
 import CountdownTimer from './components/CountdownTimer';
+import ROICalculator from './components/RoiCalculator/ROICalculator';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/TrendingCoins" element={<TrendingCoins/>} />
           <Route path="/coin/:id" element={<CoinDetails/>} />
           <Route path="/" element={<CoinList />} />
+          <Route path="/RoiCalculator" element={<ROICalculator/>} />
           <Route path="/CoinMultList" element={<CoinMultList />} />
           <Route path="/About" element={<About />} />
           <Route path="/MarketExplorer" element={<MarketExplorer />} />

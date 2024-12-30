@@ -14,6 +14,7 @@ const Header = () => {
                 <div className="links-container">
                     <ul>
                         <li><Link to="/">Início</Link></li>
+                        <li><Link to="/RoiCalculator">Simulador de Retorno</Link></li>
                         <li><Link to="/TrendingCoins">Tendências</Link></li>
                         <li><Link to="/TradingChart">Gráficos</Link></li>
                         <li><Link to="/PortfolioPage">Portfólio</Link></li>
