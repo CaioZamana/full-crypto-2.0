@@ -69,16 +69,16 @@ const ROICalculator = () => {
     }
   };
   
-  // Calcula as projeções de ROI de 1x a 100x
+  // Calcula as projeções de ROI de 1x a 369x
   const calculateProjections = () => {
     if (!currentPrice || !investment || !marketCap) return;
 
     const price = parseFloat(currentPrice);
     const capital = parseFloat(investment);
 
-    // Lista de projeções de 1x a 100x
+    // Lista de projeções de 1x a 369x
     const calculatedProjections = [];
-    for (let roi = 1; roi <= 100; roi++) {
+    for (let roi = 1; roi <= 369; roi++) {
       calculatedProjections.push({
         roi: `${roi}x`,
         price: price * roi,
