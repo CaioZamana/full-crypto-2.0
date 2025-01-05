@@ -59,15 +59,37 @@
   background-color: #e6b800;
 }
 
+.cryptoDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+  font-size: 16px;
+  color: #444;
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cryptoDetails p {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.cryptoDetails p span {
+  color: #333;
+  font-weight: normal;
+}
+
 /* Tabela Responsiva */
 .table {
   margin-top: 20px;
-  width: 100%; /* Garante 100% do tamanho da tela */
-  max-width: 100%; /* Evita que exceda os limites */
+  width: 100%;
   border-collapse: collapse;
   background-color: #fff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center; /* Centraliza o conteúdo */
+  text-align: center;
 }
 
 .table th,
@@ -87,11 +109,30 @@
   color: #333;
 }
 
-/* Responsividade da tabela */
-.table-container {
-  overflow-x: auto; /* Habilita o scroll horizontal se necessário */
+.errorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: #ffe6e6; /* Fundo leve para destacar o erro */
+  border: 1px solid #ff4d4f; /* Borda vermelha */
+  border-radius: 8px;
+  width: 50%; /* Ajuste o tamanho conforme necessário */
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Leve sombra para destaque */
 }
 
+.error {
+  color: #d32f2f; /* Texto vermelho */
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  text-align: center; /* Centraliza o texto */
+}
+
+
+/* Responsividade */
 @media (max-width: 768px) {
   .table th,
   .table td {

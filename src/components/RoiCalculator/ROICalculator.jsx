@@ -4,16 +4,29 @@ import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import styles from "./ROICalculator.module.css";
 
+const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos
+
 const ROICalculator = () => {
   const [cryptoList, setCryptoList] = useState([]);
   const [currentCrypto, setCurrentCrypto] = useState(null);
-  const [currentPrice, setCurrentPrice] = useState(0);
-  const [marketCap, setMarketCap] = useState(0);
+  const [currentPrice, setCurrentPrice] = useState(null);
+  const [marketCap, setMarketCap] = useState(null);
   const [investment, setInvestment] = useState("");
   const [projections, setProjections] = useState([]);
+  const [error, setError] = useState(""); // Novo estado para erros
 
+  const isCacheValid = (timestamp) => Date.now() - timestamp < CACHE_EXPIRATION;
+
+  // Fetch lista de criptomoedas com SWR
   useEffect(() => {
     const fetchCryptos = async () => {
+      const cachedList = JSON.parse(localStorage.getItem("cryptoList")) || [];
+      const cacheTimestamp = localStorage.getItem("cryptoListTimestamp");
+
+      if (cachedList.length > 0 && cacheTimestamp && isCacheValid(cacheTimestamp)) {
+        setCryptoList(cachedList);
+      }
+
       try {
         const response = await axios.get(
           "https://api.coingecko.com/api/v3/coins/markets",
@@ -27,8 +40,11 @@ const ROICalculator = () => {
           }
         );
         setCryptoList(response.data);
+        localStorage.setItem("cryptoList", JSON.stringify(response.data));
+        localStorage.setItem("cryptoListTimestamp", Date.now());
       } catch (error) {
-        console.error("Erro ao buscar lista de criptomoedas:", error);
+        console.error("Erro ao buscar lista de criptomoedas.", error);
+        setError("Não foi possível carregar a lista de criptomoedas. Tente novamente mais tarde.");
       }
     };
 
@@ -36,10 +52,24 @@ const ROICalculator = () => {
   }, []);
 
   const handleCryptoSelection = async (cryptoId) => {
+    setError("");
     setCurrentCrypto(cryptoId);
+    setCurrentPrice(null);
+    setMarketCap(null);
+    setProjections([]);
+
+    const cachedPrices = JSON.parse(localStorage.getItem("cryptoPrices")) || {};
+    const cacheTimestamp = JSON.parse(localStorage.getItem("cryptoPricesTimestamp")) || {};
+
+    if (cachedPrices[cryptoId] && cacheTimestamp[cryptoId] && isCacheValid(cacheTimestamp[cryptoId])) {
+      setCurrentPrice(cachedPrices[cryptoId].price);
+      setMarketCap(cachedPrices[cryptoId].marketCap);
+      return;
+    }
+
     try {
       const response = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/markets`,
+        "https://api.coingecko.com/api/v3/coins/markets",
         {
           params: {
             vs_currency: "usd",
@@ -48,10 +78,26 @@ const ROICalculator = () => {
         }
       );
       const cryptoData = response.data[0];
+
+      if (!cryptoData) {
+        setError("Não foram encontrados dados para a criptomoeda selecionada.");
+        return;
+      }
+
       setCurrentPrice(cryptoData.current_price);
       setMarketCap(cryptoData.market_cap);
+
+      cachedPrices[cryptoId] = {
+        price: cryptoData.current_price,
+        marketCap: cryptoData.market_cap,
+      };
+      cacheTimestamp[cryptoId] = Date.now();
+
+      localStorage.setItem("cryptoPrices", JSON.stringify(cachedPrices));
+      localStorage.setItem("cryptoPricesTimestamp", JSON.stringify(cacheTimestamp));
     } catch (error) {
-      console.error("Erro ao buscar dados da criptomoeda:", error);
+      console.error("Erro ao buscar dados da criptomoeda.", error);
+      setError("Não foi possível buscar os dados da criptomoeda. Tente novamente mais tarde.");
     }
   };
 
@@ -61,13 +107,15 @@ const ROICalculator = () => {
     } else {
       const [mantissa, exponent] = price.toExponential(4).split("e");
       const formattedExponent = exponent.replace("-", "⁻");
-      const decimalValue = price.toFixed(15).replace(/0+$/, "");
-      return `${decimalValue} = (${mantissa} × 10${formattedExponent})`;
+      return `${mantissa} × 10${formattedExponent}`;
     }
   };
 
   const calculateProjections = () => {
-    if (!currentPrice || !investment || !marketCap) return;
+    if (!currentPrice || !investment || !marketCap) {
+      setError("Selecione uma criptomoeda válida antes de calcular o ROI.");
+      return;
+    }
 
     const price = parseFloat(currentPrice);
     const capital = parseFloat(investment);
@@ -110,6 +158,12 @@ const ROICalculator = () => {
           ))}
         </select>
 
+        {error && (
+          <div className={styles.errorContainer}>
+            <p className={styles.error}>{error}</p>
+          </div>
+        )}
+
         {currentCrypto && (
           <div className={styles.selectedCrypto}>
             <h3>Criptomoeda Selecionada: {currentCrypto}</h3>
@@ -127,10 +181,14 @@ const ROICalculator = () => {
           onChange={(e) => setInvestment(e.target.value)}
         />
 
-        {currentPrice > 0 && (
+        {currentPrice && marketCap && (
           <div className={styles.cryptoDetails}>
-            <p>Preço Atual: {formatPrice(currentPrice)}</p>
-            <p>Market Cap: ${marketCap.toLocaleString("en-US")}</p>
+            <p>
+              Preço Atual: <span>{formatPrice(currentPrice)}</span>
+            </p>
+            <p>
+              Market Cap: <span>${marketCap.toLocaleString("en-US")}</span>
+            </p>
           </div>
         )}
 
