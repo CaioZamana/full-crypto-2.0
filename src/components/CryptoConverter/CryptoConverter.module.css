@@ -53,8 +53,8 @@
   button {
     padding: 10px;
     font-size: 1rem;
-    background-color: #4caf50;
-    color: white;
+    background-color: #ffcc00;
+    color: #333;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -67,7 +67,7 @@
   }
   
   button:hover:not(:disabled) {
-    background-color: #45a049;
+    background-color: #e6b800;
   }
   
   .resultBox {
