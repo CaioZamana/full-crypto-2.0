@@ -10,7 +10,6 @@ const PortfolioPage = () => {
     const cachedOptions = localStorage.getItem('cryptoOptions');
     return cachedOptions ? JSON.parse(cachedOptions) : [];
   });
-  const [conversionRate, setConversionRate] = useState(1);
   const [code, setCode] = useState('');
   const [quantity, setQuantity] = useState('');
   const [loadingOptions, setLoadingOptions] = useState(cryptoOptions.length === 0);
@@ -19,27 +18,6 @@ const PortfolioPage = () => {
     // Load saved portfolio from localStorage
     const savedCryptocurrencies = JSON.parse(localStorage.getItem('cryptocurrencies')) || [];
     setCryptocurrencies(savedCryptocurrencies);
-
-    // Fetch BRL to USD conversion rate
-    const fetchConversionRate = async () => {
-      const cachedRate = localStorage.getItem('conversionRate');
-      if (cachedRate) {
-        setConversionRate(parseFloat(cachedRate));
-        return;
-      }
-      try {
-        const response = await axios.get(
-          'https://api.coingecko.com/api/v3/simple/price?ids=usd&vs_currencies=brl'
-        );
-        const rate = response.data.usd.brl || 1;
-        setConversionRate(rate);
-        localStorage.setItem('conversionRate', rate);
-      } catch (error) {
-        console.error('Erro ao obter taxa de conversão de BRL para USD:', error);
-      }
-    };
-
-    fetchConversionRate();
 
     // Fetch cryptocurrency options with caching
     const fetchCryptoOptions = async () => {
@@ -54,7 +32,7 @@ const PortfolioPage = () => {
             params: {
               vs_currency: 'usd',
               order: 'market_cap_desc',
-              per_page: 200,
+              per_page: 250,
               page: 1,
             },
           }
