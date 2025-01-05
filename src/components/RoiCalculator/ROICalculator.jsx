@@ -13,7 +13,7 @@ const ROICalculator = () => {
   const [marketCap, setMarketCap] = useState(null);
   const [investment, setInvestment] = useState("");
   const [projections, setProjections] = useState([]);
-  const [error, setError] = useState(""); // Novo estado para erros
+  const [error, setError] = useState("");
 
   const isCacheValid = (timestamp) => Date.now() - timestamp < CACHE_EXPIRATION;
 
@@ -23,10 +23,12 @@ const ROICalculator = () => {
       const cachedList = JSON.parse(localStorage.getItem("cryptoList")) || [];
       const cacheTimestamp = localStorage.getItem("cryptoListTimestamp");
 
+      // Usar cache se válido
       if (cachedList.length > 0 && cacheTimestamp && isCacheValid(cacheTimestamp)) {
         setCryptoList(cachedList);
       }
 
+      // Buscar dados atualizados da API (Revalidate)
       try {
         const response = await axios.get(
           "https://api.coingecko.com/api/v3/coins/markets",
@@ -51,6 +53,7 @@ const ROICalculator = () => {
     fetchCryptos();
   }, []);
 
+  // Fetch dados de uma criptomoeda selecionada com SWR
   const handleCryptoSelection = async (cryptoId) => {
     setError("");
     setCurrentCrypto(cryptoId);
@@ -61,12 +64,13 @@ const ROICalculator = () => {
     const cachedPrices = JSON.parse(localStorage.getItem("cryptoPrices")) || {};
     const cacheTimestamp = JSON.parse(localStorage.getItem("cryptoPricesTimestamp")) || {};
 
+    // Usar cache se válido
     if (cachedPrices[cryptoId] && cacheTimestamp[cryptoId] && isCacheValid(cacheTimestamp[cryptoId])) {
       setCurrentPrice(cachedPrices[cryptoId].price);
       setMarketCap(cachedPrices[cryptoId].marketCap);
-      return;
     }
 
+    // Buscar dados atualizados da API (Revalidate)
     try {
       const response = await axios.get(
         "https://api.coingecko.com/api/v3/coins/markets",
@@ -87,6 +91,7 @@ const ROICalculator = () => {
       setCurrentPrice(cryptoData.current_price);
       setMarketCap(cryptoData.market_cap);
 
+      // Atualizar cache
       cachedPrices[cryptoId] = {
         price: cryptoData.current_price,
         marketCap: cryptoData.market_cap,

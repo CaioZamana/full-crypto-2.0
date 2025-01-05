@@ -8,6 +8,8 @@ import Footer from '../Footer/Footer';
 
 Modal.setAppElement('#root');
 
+const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos
+
 const CoinList = () => {
   const [cryptoList, setCryptoList] = useState([]);
   const [cachedPages, setCachedPages] = useState(() => {
@@ -23,13 +25,28 @@ const CoinList = () => {
   const itemsPerPage = 250;
   const totalPages = 10;
 
+  const isCacheValid = (timestamp) => Date.now() - timestamp < CACHE_EXPIRATION;
+
   useEffect(() => {
     const fetchCryptoPage = async () => {
-      if (cachedPages[currentPage]) {
-        setCryptoList(cachedPages[currentPage]);
-        return;
-      }
+      // Verificar se o cache é válido
+      const cacheTimestamp = localStorage.getItem('cryptoCacheTimestamp');
+      const isValidCache = cacheTimestamp && isCacheValid(parseInt(cacheTimestamp));
 
+      // Usar cache imediatamente, se disponível
+      if (cachedPages[currentPage] && isValidCache) {
+        setCryptoList(cachedPages[currentPage]);
+      } else if (cachedPages[currentPage]) {
+        // Cache existe, mas não é válido - Buscar dados atualizados em segundo plano
+        setCryptoList(cachedPages[currentPage]);
+        revalidateCryptoPage();
+      } else {
+        // Nenhum cache disponível para a página atual - Fazer busca imediata
+        fetchDataFromAPI();
+      }
+    };
+
+    const fetchDataFromAPI = async () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
@@ -50,12 +67,14 @@ const CoinList = () => {
             : b[sortColumn] - a[sortColumn];
         });
 
+        // Atualizar cache e estado
         const updatedCache = { ...cachedPages, [currentPage]: sortedCryptoList };
         setCachedPages(updatedCache);
-        localStorage.setItem('cryptoCache', JSON.stringify(updatedCache));
         setCryptoList(sortedCryptoList);
+        localStorage.setItem('cryptoCache', JSON.stringify(updatedCache));
+        localStorage.setItem('cryptoCacheTimestamp', Date.now());
       } catch (error) {
-        console.error('Erro ao buscar lista das criptomoedas. Usando dados em cache.', error);
+        console.error('Erro ao buscar lista das criptomoedas.', error);
 
         if (cachedPages[currentPage]) {
           setCryptoList(cachedPages[currentPage]);
@@ -64,6 +83,37 @@ const CoinList = () => {
         }
       } finally {
         setIsLoading(false);
+      }
+    };
+
+    const revalidateCryptoPage = async () => {
+      try {
+        const response = await axios.get(
+          'https://api.coingecko.com/api/v3/coins/markets',
+          {
+            params: {
+              vs_currency: 'usd',
+              per_page: itemsPerPage,
+              page: currentPage,
+              sparkline: false,
+            },
+          }
+        );
+
+        const sortedCryptoList = response.data.sort((a, b) => {
+          return sortOrder === 'asc'
+            ? a[sortColumn] - b[sortColumn]
+            : b[sortColumn] - a[sortColumn];
+        });
+
+        // Atualizar cache e estado
+        const updatedCache = { ...cachedPages, [currentPage]: sortedCryptoList };
+        setCachedPages(updatedCache);
+        setCryptoList(sortedCryptoList);
+        localStorage.setItem('cryptoCache', JSON.stringify(updatedCache));
+        localStorage.setItem('cryptoCacheTimestamp', Date.now());
+      } catch (error) {
+        console.error('Erro ao revalidar a lista de criptomoedas.', error);
       }
     };
 

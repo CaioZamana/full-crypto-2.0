@@ -4,6 +4,8 @@ import styles from './PortfolioPage.module.css'; // CSS Modules
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 
+const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos
+
 const PortfolioPage = () => {
   const [cryptocurrencies, setCryptocurrencies] = useState([]);
   const [cryptoOptions, setCryptoOptions] = useState([]);
@@ -11,13 +13,28 @@ const PortfolioPage = () => {
   const [quantity, setQuantity] = useState('');
   const [loadingOptions, setLoadingOptions] = useState(true);
 
+  // Verifica se o cache é válido
+  const isCacheValid = (timestamp) => {
+    return Date.now() - timestamp < CACHE_EXPIRATION;
+  };
+
   useEffect(() => {
-    // Load saved portfolio from localStorage
+    // Carregar portfólio salvo no `localStorage`
     const savedCryptocurrencies = JSON.parse(localStorage.getItem('cryptocurrencies')) || [];
     setCryptocurrencies(savedCryptocurrencies);
 
-    // Always attempt to fetch the latest options from API
+    // Buscar opções de criptoativos
     const fetchCryptoOptions = async () => {
+      const cachedOptions = JSON.parse(localStorage.getItem('cryptoOptions')) || [];
+      const cacheTimestamp = localStorage.getItem('cryptoOptionsTimestamp');
+
+      // Usar cache, se disponível e válido
+      if (cachedOptions.length > 0 && cacheTimestamp && isCacheValid(parseInt(cacheTimestamp))) {
+        setCryptoOptions(cachedOptions);
+        setLoadingOptions(false);
+      }
+
+      // Buscar dados atualizados na API
       try {
         const response = await axios.get(
           'https://api.coingecko.com/api/v3/coins/markets',
@@ -30,19 +47,28 @@ const PortfolioPage = () => {
             },
           }
         );
+
         const options = response.data.map((crypto) => ({
           value: crypto.id,
           label: crypto.symbol.toUpperCase(),
         }));
         const sortedOptions = options.sort((a, b) => a.label.localeCompare(b.label));
+
         setCryptoOptions(sortedOptions);
-        localStorage.setItem('cryptoOptions', JSON.stringify(sortedOptions));
         setLoadingOptions(false);
+
+        // Atualizar cache
+        localStorage.setItem('cryptoOptions', JSON.stringify(sortedOptions));
+        localStorage.setItem('cryptoOptionsTimestamp', Date.now());
       } catch (error) {
         console.error('Erro ao buscar criptoativos na API. Exibindo cache.', error);
-        // If API fails, fallback to cache
-        const cachedOptions = JSON.parse(localStorage.getItem('cryptoOptions')) || [];
-        setCryptoOptions(cachedOptions);
+
+        // Exibir cache se disponível
+        if (cachedOptions.length > 0) {
+          setCryptoOptions(cachedOptions);
+        } else {
+          setCryptoOptions([]);
+        }
         setLoadingOptions(false);
       }
     };
@@ -52,39 +78,57 @@ const PortfolioPage = () => {
 
   const fetchCryptocurrencyPrice = async (cryptoCode) => {
     const cachedPrices = JSON.parse(localStorage.getItem('cryptoPrices')) || {};
+    const cacheTimestamp = JSON.parse(localStorage.getItem('cryptoPricesTimestamp')) || {};
+
+    // Usar cache, se válido
+    if (cachedPrices[cryptoCode] && cacheTimestamp[cryptoCode] && isCacheValid(cacheTimestamp[cryptoCode])) {
+      return cachedPrices[cryptoCode];
+    }
+
+    // Buscar preço atualizado na API
     try {
       const response = await axios.get(
         `https://api.coingecko.com/api/v3/simple/price?ids=${cryptoCode}&vs_currencies=usd`
       );
       const price = response.data[cryptoCode]?.usd || null;
+
       if (price !== null) {
         cachedPrices[cryptoCode] = price;
+        cacheTimestamp[cryptoCode] = Date.now();
+
+        // Atualizar cache
         localStorage.setItem('cryptoPrices', JSON.stringify(cachedPrices));
+        localStorage.setItem('cryptoPricesTimestamp', JSON.stringify(cacheTimestamp));
       }
       return price;
     } catch (error) {
       console.error(`Erro ao buscar preço para ${cryptoCode} na API. Usando cache.`, error);
-      // Fallback to cache
       return cachedPrices[cryptoCode] || null;
     }
   };
 
   const addCryptocurrency = (crypto) => {
     const existingCrypto = cryptocurrencies.find((c) => c.code === crypto.code);
+    let updatedCryptocurrencies;
+
     if (existingCrypto) {
-      const updatedCryptocurrencies = cryptocurrencies.map((c) =>
+      updatedCryptocurrencies = cryptocurrencies.map((c) =>
         c.code === crypto.code ? { ...c, quantity: c.quantity + crypto.quantity } : c
       );
-      setCryptocurrencies(updatedCryptocurrencies);
     } else {
-      setCryptocurrencies([...cryptocurrencies, crypto]);
+      updatedCryptocurrencies = [...cryptocurrencies, crypto];
     }
+
+    setCryptocurrencies(updatedCryptocurrencies);
+    localStorage.setItem('cryptocurrencies', JSON.stringify(updatedCryptocurrencies)); // Salvar no localStorage
     setCode('');
     setQuantity('');
   };
 
   const removeCryptocurrency = (code) => {
-    setCryptocurrencies(cryptocurrencies.filter((crypto) => crypto.code !== code));
+    const updatedCryptocurrencies = cryptocurrencies.filter((crypto) => crypto.code !== code);
+    setCryptocurrencies(updatedCryptocurrencies);
+    localStorage.setItem('cryptocurrencies', JSON.stringify(updatedCryptocurrencies)); // Atualizar cache
   };
 
   const calculateTotalValue = () => {
