@@ -6,25 +6,18 @@ import Footer from '../Footer/Footer';
 
 const PortfolioPage = () => {
   const [cryptocurrencies, setCryptocurrencies] = useState([]);
-  const [cryptoOptions, setCryptoOptions] = useState(() => {
-    const cachedOptions = localStorage.getItem('cryptoOptions');
-    return cachedOptions ? JSON.parse(cachedOptions) : [];
-  });
+  const [cryptoOptions, setCryptoOptions] = useState([]);
   const [code, setCode] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [loadingOptions, setLoadingOptions] = useState(cryptoOptions.length === 0);
+  const [loadingOptions, setLoadingOptions] = useState(true);
 
   useEffect(() => {
     // Load saved portfolio from localStorage
     const savedCryptocurrencies = JSON.parse(localStorage.getItem('cryptocurrencies')) || [];
     setCryptocurrencies(savedCryptocurrencies);
 
-    // Fetch cryptocurrency options with caching
+    // Always attempt to fetch the latest options from API
     const fetchCryptoOptions = async () => {
-      if (cryptoOptions.length > 0) {
-        setLoadingOptions(false);
-        return;
-      }
       try {
         const response = await axios.get(
           'https://api.coingecko.com/api/v3/coins/markets',
@@ -46,17 +39,35 @@ const PortfolioPage = () => {
         localStorage.setItem('cryptoOptions', JSON.stringify(sortedOptions));
         setLoadingOptions(false);
       } catch (error) {
-        console.error('Erro ao buscar criptoativos:', error);
+        console.error('Erro ao buscar criptoativos na API. Exibindo cache.', error);
+        // If API fails, fallback to cache
+        const cachedOptions = JSON.parse(localStorage.getItem('cryptoOptions')) || [];
+        setCryptoOptions(cachedOptions);
+        setLoadingOptions(false);
       }
     };
 
     fetchCryptoOptions();
-  }, [cryptoOptions]);
+  }, []);
 
-  useEffect(() => {
-    // Save portfolio to localStorage whenever it changes
-    localStorage.setItem('cryptocurrencies', JSON.stringify(cryptocurrencies));
-  }, [cryptocurrencies]);
+  const fetchCryptocurrencyPrice = async (cryptoCode) => {
+    const cachedPrices = JSON.parse(localStorage.getItem('cryptoPrices')) || {};
+    try {
+      const response = await axios.get(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${cryptoCode}&vs_currencies=usd`
+      );
+      const price = response.data[cryptoCode]?.usd || null;
+      if (price !== null) {
+        cachedPrices[cryptoCode] = price;
+        localStorage.setItem('cryptoPrices', JSON.stringify(cachedPrices));
+      }
+      return price;
+    } catch (error) {
+      console.error(`Erro ao buscar preço para ${cryptoCode} na API. Usando cache.`, error);
+      // Fallback to cache
+      return cachedPrices[cryptoCode] || null;
+    }
+  };
 
   const addCryptocurrency = (crypto) => {
     const existingCrypto = cryptocurrencies.find((c) => c.code === crypto.code);
@@ -74,25 +85,6 @@ const PortfolioPage = () => {
 
   const removeCryptocurrency = (code) => {
     setCryptocurrencies(cryptocurrencies.filter((crypto) => crypto.code !== code));
-  };
-
-  const fetchCryptocurrencyPrice = async (cryptoCode) => {
-    const cachedPrices = JSON.parse(localStorage.getItem('cryptoPrices')) || {};
-    if (cachedPrices[cryptoCode]) {
-      return cachedPrices[cryptoCode];
-    }
-    try {
-      const response = await axios.get(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${cryptoCode}&vs_currencies=usd`
-      );
-      const price = response.data[cryptoCode]?.usd || null;
-      cachedPrices[cryptoCode] = price;
-      localStorage.setItem('cryptoPrices', JSON.stringify(cachedPrices));
-      return price;
-    } catch (error) {
-      console.error('Erro ao obter preço da criptomoeda:', error);
-      return null;
-    }
   };
 
   const calculateTotalValue = () => {
@@ -139,26 +131,13 @@ const PortfolioPage = () => {
             )}
           </label>
           <label>
-  Quantidade:
-  <input
-    type="text"
-    value={quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-    onChange={(e) => {
-      const rawValue = e.target.value.replace(/\./g, '').replace(',', '.'); // Remove pontos e converte vírgulas para pontos
-      if (!isNaN(rawValue)) {
-        setQuantity(rawValue);
-      }
-    }}
-    onBlur={() => {
-      const formattedValue = parseFloat(quantity).toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-      setQuantity(formattedValue.replace(/\./g, '').replace(',', '.')); // Armazena no formato correto
-    }}
-  />
-</label>
-
+            Quantidade:
+            <input
+              type="text"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+            />
+          </label>
           <button type="submit">Adicionar</button>
         </form>
 
@@ -174,46 +153,32 @@ const PortfolioPage = () => {
               </tr>
             </thead>
             <tbody>
-  {cryptocurrencies.map((crypto, index) => (
-    <tr key={index}>
-      <td>{crypto.code}</td>
-      <td>
-        {crypto.quantity.toLocaleString('pt-BR', {
-          minimumFractionDigits: 0, // Sem dígitos fracionários para quantidades inteiras
-          maximumFractionDigits: 2, // Permitir até 2 casas decimais para fracionadas
-        })}
-      </td>
-      <td>
-        {crypto.currentPrice
-          ? `${
-              crypto.currentPrice < 0.0001
-                ? crypto.currentPrice.toLocaleString('en-US', {
-                    minimumFractionDigits: 8, // Exibe até 8 casas decimais para moedas muito pequenas
-                    maximumFractionDigits: 10, // No máximo 10 casas decimais
-                  })
-                : crypto.currentPrice.toLocaleString('en-US', {
-                    minimumFractionDigits: 2, // Exibe 2 casas decimais para valores normais
-                    maximumFractionDigits: 3, // Máximo 3 casas decimais
-                  })
-            }`
-          : 'Carregando...'}
-      </td>
-      <td>
-        ${crypto.quantity * crypto.currentPrice
-          ? (crypto.quantity * crypto.currentPrice).toLocaleString('en-US', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2, // Valor total sempre com 2 casas decimais
-            })
-          : 'Carregando...'}
-      </td>
-      <td>
-        <button onClick={() => removeCryptocurrency(crypto.code)}>Remover</button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
-
+              {cryptocurrencies.map((crypto, index) => (
+                <tr key={index}>
+                  <td>{crypto.code}</td>
+                  <td>{crypto.quantity}</td>
+                  <td>
+                    {crypto.currentPrice !== undefined
+                      ? `$${crypto.currentPrice.toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 8,
+                        })}`
+                      : 'Carregando...'}
+                  </td>
+                  <td>
+                    {crypto.currentPrice !== undefined
+                      ? `$${(crypto.quantity * crypto.currentPrice).toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}`
+                      : 'Carregando...'}
+                  </td>
+                  <td>
+                    <button onClick={() => removeCryptocurrency(crypto.code)}>Remover</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
         <div className={styles.totalValue}>
