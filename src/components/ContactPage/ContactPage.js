@@ -1,19 +1,26 @@
-
+import React from 'react';
 import Header from '../Header/Header';
-import './ContactPage.module.css'
 import Footer from '../Footer/Footer';
+import styles from './ContactPage.module.css'; // CSS Modules
 
 const ContactPage = () => {
-
-
-  
-
   return (
-    <div><Header />
-        <h1>Entre em Contato</h1>
-        <p>Entre em contato conosco para parcerias, anúncios ou dúvidas através do E-mail:           <p><a href="mailto:caio@gmail.com">caiobzm@gmail.com</a></p>
-        </p>
-      <Footer/>
+    <div className={styles.container}>
+      <Header />
+      <main className={styles.main}>
+        <section className={styles.contactSection}>
+          <h1 className={styles.title}>Entre em Contato</h1>
+          <p className={styles.description}>
+            Estamos disponíveis para parcerias, anúncios ou esclarecer dúvidas. Entre em contato conosco pelo e-mail:
+          </p>
+          <p className={styles.email}>
+            <a href="mailto:caiobzm@gmail.com" className={styles.emailLink}>
+              caiobzm@gmail.com
+            </a>
+          </p>
+        </section>
+      </main>
+      <Footer />
     </div>
   );
 };

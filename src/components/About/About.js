@@ -1,47 +1,50 @@
-// About.js
-
 import React from 'react';
-import './About.module.css';
+import styles from './About.module.css'; // CSS Modules
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 
 const About = () => {
-    return (
-        <div><Header />
+  return (
+    <div className={styles.container}>
+      <Header />
+      <main className={styles.main}>
+        <section className={styles.intro}>
+          <h1 className={styles.title}>Sobre Nós</h1>
+          <p className={styles.subtitle}>
+            Sua fonte confiável de informações sobre o mundo das criptomoedas.
+          </p>
+        </section>
 
-            <div className="about">
-                <div className="about-header">
-                    <h1>Sobre Nós</h1>
-                </div>
+        <section className={styles.content}>
+          <h2 className={styles.sectionTitle}>Bem-vindo ao Nosso Universo</h2>
+          <p>
+            Estamos comprometidos em fornecer informações detalhadas, atualizadas e acessíveis sobre o mercado de criptomoedas. Nossa missão é educar, informar e inspirar, permitindo que nossos visitantes tomem decisões informadas no mundo das finanças digitais.
+          </p>
 
-                <div className="about-content">
-                    <p>
-                        Bem-vindo ao nosso site! Somos uma equipe dedicada a fornecer informações valiosas sobre o mercado de Criptomoedas.
-                    </p>
+          <h2 className={styles.sectionTitle}>Nossa Missão</h2>
+          <p>
+            Promover o conhecimento e a compreensão das criptomoedas e tecnologias emergentes, tornando o mundo financeiro mais acessível a todos. Valorizamos a confiança e nos esforçamos para ser um guia confiável neste ecossistema dinâmico.
+          </p>
 
-                    <p>
-                        Nosso objetivo é oferecer conteúdo de qualidade para ajudar nossos visitantes a se manterem informados e atualizados.
-                    </p>
+          <h2 className={styles.sectionTitle}>Nossa Equipe</h2>
+          <p>
+            Nossa equipe é formada por profissionais apaixonados por tecnologia, economia e inovação. Trabalhamos juntos para oferecer uma experiência de alta qualidade e manter nossos conteúdos relevantes, confiáveis e alinhados às suas necessidades.
+          </p>
 
-                    <h2>Nossa Missão</h2>
-                    <p>
-                        Buscamos ser uma fonte confiável de informações, promovendo a educação e a compreensão em diversas áreas, desde tecnologia até finanças.
-                    </p>
-
-                    <h2>Nossa Equipe</h2>
-                    <p>
-                        Contamos com uma equipe apaixonada e experiente, comprometida em fornecer conteúdo relevante e útil.
-                    </p>
-
-                    <h2>Contato</h2>
-                    <p>
-                        Se você tiver alguma dúvida, sugestão ou quiser entrar em contato conosco, não hesite em nos enviar um e-mail para <a href="mailto:caiobzm@gmail.com">caiobzm@gmail.com</a>.
-                    </p>
-                </div>
-            </div>
-            <Footer/>
-        </div>
-    );
+          <h2 className={styles.sectionTitle}>Entre em Contato</h2>
+          <p>
+            Gostaríamos de ouvir você! Caso tenha dúvidas, sugestões ou apenas queira dizer "olá", envie um e-mail para:
+          </p>
+          <p>
+            <a href="mailto:caiobzm@gmail.com" className={styles.email}>
+              caiobzm@gmail.com
+            </a>
+          </p>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
 };
 
 export default About;
