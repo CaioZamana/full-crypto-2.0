@@ -91,88 +91,86 @@ const CoinList = () => {
   ];
 
   return (
-    <div>
+    <div className={styles.container}>
       <Header />
-      <div className={styles.container}>
-        <h1>Lista de Criptomoedas</h1>
-        <div className={styles.tableContainer}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                {columns.map((column) => (
-                  <th key={column.key} onClick={() => handleSort(column.key)}>
-                    {column.label}{' '}
-                    {sortColumn === column.key &&
-                      (sortOrder === 'asc' ? '▲' : '▼')}
-                  </th>
-                ))}
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cryptoList.map((crypto) => (
-                <tr key={crypto.id}>
-                  {columns.map((column) => (
-                    <td key={column.key}>
-                      {column.key === 'current_price' ||
-                      column.key === 'market_cap' ||
-                      column.key === 'total_volume'
-                        ? crypto[column.key]?.toLocaleString('pt-BR', {
-                            style: 'currency',
-                            currency: 'USD',
-                          })
-                        : column.key === 'ath_change_percentage' ||
-                          column.key === 'atl_change_percentage'
-                        ? `${crypto[column.key]?.toFixed(2)}%`
-                        : crypto[column.key]?.toLocaleString('pt-BR')}
-                    </td>
-                  ))}
-                  <td>
-                    <button
-                      className={styles.detailsButton}
-                      onClick={() => handleCryptoDetails(crypto.id)}
-                    >
-                      Detalhes
-                    </button>
-                  </td>
-                </tr>
+      <h1 className={styles.header}>Lista de Criptomoedas</h1>
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              {columns.map((column) => (
+                <th key={column.key} onClick={() => handleSort(column.key)}>
+                  {column.label}{' '}
+                  {sortColumn === column.key &&
+                    (sortOrder === 'asc' ? '▲' : '▼')}
+                </th>
               ))}
-            </tbody>
-          </table>
-        </div>
-        <div className={styles.pagination}>
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className={styles.paginationButton}
-          >
-            Anterior
-          </button>
-          <span className={styles.pageInfo}>
-            Página {currentPage} de {totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className={styles.paginationButton}
-          >
-            Próxima
-          </button>
-        </div>
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          contentLabel="Detalhes da Criptomoeda"
-          className={styles.modal}
-        >
-          {selectedCrypto && (
-            <CryptoDetailsCard
-              cryptoDetails={selectedCrypto}
-              closeModal={closeModal}
-            />
-          )}
-        </Modal>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cryptoList.map((crypto) => (
+              <tr key={crypto.id}>
+                {columns.map((column) => (
+                  <td key={column.key}>
+                    {column.key === 'current_price' ||
+                    column.key === 'market_cap' ||
+                    column.key === 'total_volume'
+                      ? crypto[column.key]?.toLocaleString('pt-BR', {
+                          style: 'currency',
+                          currency: 'USD',
+                        })
+                      : column.key === 'ath_change_percentage' ||
+                        column.key === 'atl_change_percentage'
+                      ? `${crypto[column.key]?.toFixed(2)}%`
+                      : crypto[column.key]?.toLocaleString('pt-BR')}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    className={styles.detailsButton}
+                    onClick={() => handleCryptoDetails(crypto.id)}
+                  >
+                    Detalhes
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+      <div className={styles.pagination}>
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={styles.paginationButton}
+        >
+          Anterior
+        </button>
+        <span className={styles.pageInfo}>
+          Página {currentPage} de {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={styles.paginationButton}
+        >
+          Próxima
+        </button>
+      </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Detalhes da Criptomoeda"
+        className={styles.modal}
+      >
+        {selectedCrypto && (
+          <CryptoDetailsCard
+            cryptoDetails={selectedCrypto}
+            closeModal={closeModal}
+          />
+        )}
+      </Modal>
       <Footer />
     </div>
   );
