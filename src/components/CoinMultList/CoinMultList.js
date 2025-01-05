@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
-import CryptoDetailsCard from '../CryptoDetailsCard';
-import './CoinMultList.css'; // Certifique-se de ter estilos CSS correspondentes
-import Footer from '../Footer';
-import Header from '../Header';
+import CryptoDetailsCard from '../CryptoDetailsCard/CryptoDetailsCard';
+import './CoinMultList.module.css';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
 
 Modal.setAppElement('#root');
 

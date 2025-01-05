@@ -1,0 +1,111 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-x: auto; /* Permite scroll horizontal em telas pequenas */
+}
+
+.tableContainer {
+  width: 100%; /* Ocupa toda a largura disponível */
+  overflow-x: auto; /* Permite scroll horizontal, se necessário */
+}
+
+.table {
+  width: 100%; /* Tabela ocupa 100% da largura do contêiner */
+  max-width: 100%; /* Evita que ultrapasse o tamanho da tela */
+  border-collapse: collapse;
+  background-color: #fff; /* Fundo branco */
+  color: #333; /* Texto preto */
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f5f5f5;
+  color: #333;
+  cursor: pointer;
+}
+
+.table th:hover {
+  background-color: #eaeaea;
+}
+
+.detailsButton {
+  padding: 10px 15px;
+  background-color: #ffcc00;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.detailsButton:hover {
+  background-color: #e6b800;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.paginationButton {
+  padding: 8px 16px;
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.paginationButton:hover {
+  background-color: #e6b800;
+}
+
+.pageInfo {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Responsividade */
+
+/* Telas médias (até 768px) */
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .detailsButton {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+}
+
+/* Telas pequenas (até 480px) */
+@media (max-width: 480px) {
+  .table th,
+  .table td {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .detailsButton {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .paginationButton {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}

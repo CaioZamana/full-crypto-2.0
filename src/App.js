@@ -7,19 +7,19 @@ import {
 } from "react-router-dom";
 
 
-import About from './components/About';
-import MarketExplorer from './components/MarketExplorer';
-import CoinList from './components/CoinList';
-import ContactPage from './components/ContactPage';
-import PortfolioPage from './components/PortfolioPage';
-import TradingChart from './components/TradingChart';
-import BTCPage from './components/btc';
-import CoinMultList from './components/CoinMultList';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import CryptoConverter from './components/CryptoConverter';
-import TrendingCoins from './components/TrendingCoins';
+import About from './components/About/About.js';
+import MarketExplorer from './components/MarketExplorer/MarketExplorer.js';
+import CoinList from './components/CoinList/CoinList.jsx';
+import ContactPage from './components/ContactPage/ContactPage.js';
+import PortfolioPage from './components/PortfolioPage/PortfolioPage.js';
+import TradingChart from './components/TradingChart/TradingChart.js';
+import BTCPage from './components/btc/btc.js';
+import CoinMultList from './components/CoinMultList/CoinMultList.js';
+import PrivacyPolicy from './components/PrivacyPolicy/PrivacyPolicy.js';
+import CryptoConverter from './components/CryptoConverter/CryptoConverter.js';
+import TrendingCoins from './components/TrendingCoins/TrendingCoins.js';
 import CoinDetails from './components/CoinDetails/CoinDetails';
-import CountdownTimer from './components/CountdownTimer';
+import CountdownTimer from './components/CountdownTimer/CountdownTimer.js';
 import ROICalculator from './components/RoiCalculator/ROICalculator';
 
 function App() {

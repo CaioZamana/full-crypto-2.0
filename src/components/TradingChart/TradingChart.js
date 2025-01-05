@@ -1,9 +1,9 @@
-import './TradingChart.css'
+import './TradingChart.module.css'
 import React from "react";
 //https://www.npmjs.com/package/react-tradingview-embed/v/3.0.6
 import { AdvancedChart } from "react-tradingview-embed";
-import Header from "../Header";
-import Footer from '../Footer';
+import Header from "../Header/Header";
+import Footer from '../Footer/Footer';
 
 //https://k-128.github.io/react-tradingview-embed/?path=/story/widgets--advanced-chart-story
 //https://www.tradingview.com/widget/advanced-chart/

@@ -1,7 +1,7 @@
 
-import Header from '../Header';
-import './ContactPage.css'
-import Footer from '../Footer';
+import Header from '../Header/Header';
+import './ContactPage.module.css'
+import Footer from '../Footer/Footer';
 
 const ContactPage = () => {
 

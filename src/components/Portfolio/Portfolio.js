@@ -3,7 +3,7 @@ import CryptocurrencyRow from './CryptocurrencyRow';
 import CryptocurrencyTable from './CryptocurrencyTable';
 import TotalPortfolioValue from './TotalPortfolioValue';
 import { fetchCryptocurrencyPrice, fetchBRLtoUSDConversionRate } from './api';
-import './Portfolios.css';
+import './Portfolio.module.css';
 
 export {
   AddCryptocurrencyForm,

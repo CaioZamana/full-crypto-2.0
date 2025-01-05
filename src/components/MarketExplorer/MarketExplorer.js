@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useTable, useSortBy, useFilters } from 'react-table';
-import './MarketExplorer.css';
-import Header from '../Header';
-import Footer from '../Footer';
+import './MarketExplorer.module.css';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 const CoinGeckoAPI = 'https://api.coingecko.com/api/v3';
 

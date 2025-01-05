@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Footer from '../Footer';
-import Header from '../Header';
-import './CryptoConverter.css';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
+import './CryptoConverter.module.css';
 
 const CryptoConverter = () => {
   const [cryptoList, setCryptoList] = useState([]);

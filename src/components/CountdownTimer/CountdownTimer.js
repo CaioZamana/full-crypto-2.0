@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './CountdownTimer.css';
-import Header from '../Header';
-import Footer from '../Footer';
+import './CountdownTimer.module.css';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 const CountdownTimer = () => {
     const [countdown, setCountdown] = useState({

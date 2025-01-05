@@ -1,11 +1,11 @@
 // TrendingCoins.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Header from '../Header';
-import Footer from '../Footer';
-import CryptoDetailsCard from '../CryptoDetailsCard';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
+import CryptoDetailsCard from '../CryptoDetailsCard/CryptoDetailsCard';
 import Modal from 'react-modal';
-import './trending.css';
+import './TrendingCoins.module.css';
 
 Modal.setAppElement('#root');
 

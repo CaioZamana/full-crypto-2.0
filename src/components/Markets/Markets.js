@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 import axios from 'axios';
-import './Markets.css';
+import './Markets.module.css';
 
 const CoinGeckoAPI = 'https://api.coingecko.com/api/v3';
 

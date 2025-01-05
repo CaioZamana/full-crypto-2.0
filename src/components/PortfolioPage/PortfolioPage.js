@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import AddCryptocurrencyForm from '../../components/Portfolio/AddCryptocurrencyForm';
-import CryptocurrencyTable from '../../components/Portfolio/CryptocurrencyTable';
-import { fetchBRLtoUSDConversionRate } from '../../components/Portfolio/api';
-import './style.css';
-import Footer from '../Footer';
-import Header from '../Header';
+import AddCryptocurrencyForm from '../Portfolio/AddCryptocurrencyForm';
+import CryptocurrencyTable from '../Portfolio/CryptocurrencyTable';
+import { fetchBRLtoUSDConversionRate } from '../Portfolio/api';
+import './PortfolioPage.module.css';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
 
 
 const PortfolioPage = () => {

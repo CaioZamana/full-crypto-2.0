@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import './MarketInfo.css';
+import './MarketInfo.module.css';
 
 const CoinGeckoAPI = 'https://api.coingecko.com/api/v3';
 

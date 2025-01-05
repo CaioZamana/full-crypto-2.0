@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Footer from "../Footer";
-import Header from "../Header";
+import Footer from "../Footer/Footer";
+import Header from "../Header/Header";
 
 const ROICalculator = () => {
   const [cryptoList, setCryptoList] = useState([]); // Lista de criptomoedas

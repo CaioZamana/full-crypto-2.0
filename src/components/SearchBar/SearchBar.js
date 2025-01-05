@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './SearchBar.css';
+import './SearchBar.module.css';
 import CryptoDetailsCardModalSearch from '../CryptoDetailsCardModalSearch';
 
 const SearchBar = ({ onSearch }) => {

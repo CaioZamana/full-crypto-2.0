@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
-import CryptoDetailsCard from '../CryptoDetailsCard';
-import './CoinList.css';
-import Header from '../Header';
-import Footer from '../Footer';
+import CryptoDetailsCard from '../CryptoDetailsCard/CryptoDetailsCard';
+import styles from './CoinList.module.css';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 Modal.setAppElement('#root');
 
@@ -16,7 +16,7 @@ const CoinList = () => {
   const [sortColumn, setSortColumn] = useState('market_cap_rank');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
-  const totalPages = 10; // Total de páginas
+  const totalPages = 10;
 
   useEffect(() => {
     const fetchCryptoPage = async () => {
@@ -26,9 +26,9 @@ const CoinList = () => {
           {
             params: {
               vs_currency: 'usd',
-              per_page: itemsPerPage, // Define o número de itens por página
-              page: currentPage, // Página atual
-              sparkline: true,
+              per_page: itemsPerPage,
+              page: currentPage,
+              sparkline: false,
             },
           }
         );
@@ -53,8 +53,7 @@ const CoinList = () => {
       const response = await axios.get(
         `https://api.coingecko.com/api/v3/coins/${cryptoId}`
       );
-      const cryptoDetails = response.data;
-      setSelectedCrypto(cryptoDetails);
+      setSelectedCrypto(response.data);
       setModalIsOpen(true);
     } catch (error) {
       console.error('Erro ao buscar detalhes da criptomoeda:', error);
@@ -80,14 +79,13 @@ const CoinList = () => {
     }
   };
 
-  // Definindo as colunas e rótulos
   const columns = [
     { key: 'market_cap_rank', label: 'Ranking' },
     { key: 'name', label: 'Nome' },
     { key: 'symbol', label: 'Símbolo' },
     { key: 'current_price', label: 'Preço (USD)' },
     { key: 'market_cap', label: 'Cap. de Mercado' },
-    { key: 'total_volume', label: 'Volume (USDT/24hs)' },
+    { key: 'total_volume', label: 'Volume (24h)' },
     { key: 'ath_change_percentage', label: 'ATH (%)' },
     { key: 'atl_change_percentage', label: 'ATL (%)' },
   ];
@@ -95,56 +93,68 @@ const CoinList = () => {
   return (
     <div>
       <Header />
-      <div className="container">
-        <h1>Cripto List</h1>
-        <table>
-          <thead>
-            <tr>
-              {columns.map((column) => (
-                <th key={column.key} onClick={() => handleSort(column.key)}>
-                  {column.label}{' '}
-                  {sortColumn === column.key && sortOrder === 'asc' && '▲'}
-                  {sortColumn === column.key && sortOrder === 'desc' && '▼'}
-                </th>
-              ))}
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {cryptoList.map((crypto) => (
-              <tr key={crypto.id}>
+      <div className={styles.container}>
+        <h1>Lista de Criptomoedas</h1>
+        <div className={styles.tableContainer}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
                 {columns.map((column) => (
-                  <td key={column.key}>
-                    {column.key === 'current_price'
-                      ? crypto[column.key].toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'USD',
-                      })
-                      : column.key === 'ath_change_percentage' || column.key === 'atl_change_percentage'
-                        ? `${crypto[column.key].toFixed(2).toLocaleString('pt-BR')}%`
-                        : crypto[column.key].toLocaleString('pt-BR')}
-                  </td>
+                  <th key={column.key} onClick={() => handleSort(column.key)}>
+                    {column.label}{' '}
+                    {sortColumn === column.key &&
+                      (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
                 ))}
-                <td>
-                  <button onClick={() => handleCryptoDetails(crypto.id)}>
-                    Detalhes
-                  </button>
-                </td>
+                <th>Ações</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="pagination">
+            </thead>
+            <tbody>
+              {cryptoList.map((crypto) => (
+                <tr key={crypto.id}>
+                  {columns.map((column) => (
+                    <td key={column.key}>
+                      {column.key === 'current_price' ||
+                      column.key === 'market_cap' ||
+                      column.key === 'total_volume'
+                        ? crypto[column.key]?.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'USD',
+                          })
+                        : column.key === 'ath_change_percentage' ||
+                          column.key === 'atl_change_percentage'
+                        ? `${crypto[column.key]?.toFixed(2)}%`
+                        : crypto[column.key]?.toLocaleString('pt-BR')}
+                    </td>
+                  ))}
+                  <td>
+                    <button
+                      className={styles.detailsButton}
+                      onClick={() => handleCryptoDetails(crypto.id)}
+                    >
+                      Detalhes
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className={styles.pagination}>
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
+            className={styles.paginationButton}
           >
             Anterior
           </button>
-          <span>{`Página ${currentPage} de ${totalPages}`}</span>
+          <span className={styles.pageInfo}>
+            Página {currentPage} de {totalPages}
+          </span>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
+            className={styles.paginationButton}
           >
             Próxima
           </button>
@@ -153,6 +163,7 @@ const CoinList = () => {
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
           contentLabel="Detalhes da Criptomoeda"
+          className={styles.modal}
         >
           {selectedCrypto && (
             <CryptoDetailsCard

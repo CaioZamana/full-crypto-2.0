@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './CryptoDetails.css';
+import './CryptoDetails.module.css';
 
 const CryptoDetails = ({ cryptoId }) => {
   const [cryptoDetails, setCryptoDetails] = useState(null);

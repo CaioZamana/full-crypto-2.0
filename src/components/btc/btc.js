@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.css';
+import './index.module.css';
 import piCycleTopIndicator from './Pi Cycle Top Indicator.png'
 import stockToFlowImage from './Stock-Flow.PNG';
 import tool2YearMAImage from './Tool2-YearMAMultiplier.PNG';
@@ -12,8 +12,8 @@ import chartImage from './chart.PNG';
 import topCapImage from './TopCAp.PNG';
 import balancedPriceImage from './Balanced Price.PNG';
 import terminalPriceImage from './Bitcoin Terminal Price.PNG';
-import Footer from '../Footer';
-import Header from '../Header';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
 
 function BTCPage() {
   return (

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import CryptoDetailsCard from '../CryptoDetailsCard';
+import CryptoDetailsCard from '../CryptoDetailsCard/CryptoDetailsCard';
 
 Modal.setAppElement('#root');
 

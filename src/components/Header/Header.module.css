@@ -1,0 +1,123 @@
+/* Header.module.css */
+
+.header {
+  display: flex;
+  flex-wrap: wrap; /* Permite ajuste automático em telas menores */
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background-color: #333;
+  color: #fff;
+}
+
+.logo img {
+  width: 50px; /* Dimensão consistente */
+  height: auto;
+}
+
+.nav {
+  flex: 1;
+  text-align: center;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px; /* Espaçamento uniforme entre itens */
+  padding: 0;
+  margin: 0;
+}
+
+.navList li {
+  margin: 0;
+}
+
+.navList a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  transition: color 0.3s ease-in-out;
+}
+
+.navList a:hover {
+  color: #ffcc00;
+}
+
+.searchBarContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.searchBarContainer input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.searchBarContainer button {
+  padding: 10px 15px;
+  margin-left: 5px;
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 4px;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.searchBarContainer button:hover {
+  background-color: #e6b800;
+}
+
+.login {
+  margin-top: 10px;
+}
+
+/* Responsividade para telas médias (tablets) */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navList {
+    flex-direction: column;
+    gap: 10px; /* Ajusta o espaçamento para exibição vertical */
+  }
+
+  .searchBarContainer {
+    flex-direction: column;
+    margin-top: 10px;
+  }
+
+  .searchBarContainer input {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+}
+
+/* Responsividade para telas pequenas (celulares) */
+@media (max-width: 480px) {
+  .header {
+    padding: 10px;
+  }
+
+  .logo img {
+    width: 40px; /* Ajusta a logo para telas pequenas */
+  }
+
+  .navList a {
+    font-size: 14px; /* Reduz o tamanho da fonte */
+  }
+
+  .searchBarContainer button {
+    width: 100%;
+  }
+}

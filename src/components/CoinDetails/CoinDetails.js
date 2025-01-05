@@ -1,8 +1,8 @@
 // CoinDetails.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Header from '../Header';
-import Footer from '../Footer';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 const CoinDetails = ({ params }) => {
   const [coinDetails, setCoinDetails] = useState(null);

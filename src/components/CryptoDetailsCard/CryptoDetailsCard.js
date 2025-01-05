@@ -1,5 +1,5 @@
 import React from 'react';
-import './CryptoDetailsCard.css';
+import './CryptoDetailsCard.module.css';
 
 const CryptoInfoBox = ({ title, content }) => (
   <div className="info-box">

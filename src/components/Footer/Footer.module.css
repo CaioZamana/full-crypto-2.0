@@ -1,0 +1,99 @@
+/* Estilo geral do footer */
+.footer {
+  background-color: #333;
+  color: #fff;
+  margin-top: 20px;
+  padding: 20px 0;
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap; /* Permite quebras em telas menores */
+  gap: 20px; /* Espaçamento entre as seções */
+}
+
+.footerSection {
+  flex: 1;
+  max-width: 300px;
+}
+
+.footerSection h2 {
+  color: #fff;
+  border-bottom: 2px solid #fff;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.footerSection p {
+  color: #ccc; /* Tom suave para texto */
+  line-height: 1.6; /* Melhor legibilidade */
+}
+
+.footerSection ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footerSection li {
+  margin-bottom: 10px;
+}
+
+.footerSection a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease-in-out;
+}
+
+.footerSection a:hover {
+  color: #ffcc00;
+}
+
+.footerBottom {
+  text-align: center;
+  padding: 15px;
+  background-color: #222;
+}
+
+.footerBottom p {
+  margin: 0;
+  font-size: 14px;
+  color: #fff;
+}
+
+/* Responsividade */
+
+/* Para tablets */
+@media (max-width: 768px) {
+  .footerContent {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footerSection {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .footerSection ul {
+    text-align: center;
+  }
+}
+
+/* Para celulares */
+@media (max-width: 480px) {
+  .footer {
+    padding: 15px 10px;
+  }
+
+  .footerSection h2 {
+    font-size: 18px;
+  }
+
+  .footerSection a {
+    font-size: 13px;
+  }
+}
