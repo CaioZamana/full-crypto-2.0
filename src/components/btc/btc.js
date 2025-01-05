@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.module.css';
+import './btc.module.css';
 import piCycleTopIndicator from './Pi Cycle Top Indicator.png'
 import stockToFlowImage from './Stock-Flow.PNG';
 import tool2YearMAImage from './Tool2-YearMAMultiplier.PNG';
