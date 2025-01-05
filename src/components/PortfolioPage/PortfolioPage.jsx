@@ -114,8 +114,8 @@ const PortfolioPage = () => {
 
   return (
     <div className={styles.container}>
-      <Header/>
-      <header className={styles.header}>
+      <Header />
+      <header className={styles.pageHeader}>
         <h1>Portfólio de Criptomoedas</h1>
       </header>
       <main className={styles.main}>
@@ -179,7 +179,7 @@ const PortfolioPage = () => {
           <h2>Valor Total do Portfólio: ${calculateTotalValue().toFixed(2)}</h2>
         </div>
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

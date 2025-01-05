@@ -11,7 +11,7 @@ import About from './components/About/About.js';
 import MarketExplorer from './components/MarketExplorer/MarketExplorer.js';
 import CoinList from './components/CoinList/CoinList.jsx';
 import ContactPage from './components/ContactPage/ContactPage.js';
-import PortfolioPage from './components/PortfolioPage/PortfolioPage.js';
+import PortfolioPage from './components/PortfolioPage/PortfolioPage.jsx';
 import TradingChart from './components/TradingChart/TradingChart.js';
 import BTCPage from './components/btc/btc.js';
 import CoinMultList from './components/CoinMultList/CoinMultList.js';
