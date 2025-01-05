@@ -1,37 +1,44 @@
-/* Adicione este estilo ao seu arquivo CSS ou componente de estilo */
-
-/* Estilo para o contêiner do SearchBar */
 .search-bar-container {
-    position: relative;
+  display: flex;
+  align-items: center; /* Alinha verticalmente o botão e o input */
+  gap: 10px; /* Espaçamento entre input e botão */
+  position: static; /* Remove interferência de alinhamento relativo */
+  height: 50px; /* Altura consistente */
+}
+
+.search-bar-container input {
+  flex: 1; /* Faz o input ocupar o espaço disponível */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-bar-container button {
+  padding: 10px 15px;
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 4px;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  flex-shrink: 0; /* Impede compressão */
+}
+
+.search-bar-container button:hover {
+  background-color: #e6b800;
+}
+
+/* Ajustes para telas pequenas */
+@media (max-width: 768px) {
+  .search-bar-container {
+    flex-direction: column;
+    width: 100%; /* Alinha com o contêiner pai */
   }
-  
-  /* Estilo para a lista de sugestões */
-  .suggestions-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    width: 100%;
-    background-color: #9c9797;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1;
+
+  .search-bar-container input,
+  .search-bar-container button {
+    width: 100%; /* Ambos ocupam a largura */
   }
-  
-  /* Estilo para cada sugestão na lista */
-  .suggestions-list-item {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  /* Estilo para a sugestão selecionada */
-  .suggestions-list-item:hover {
-    background-color: #ccc;
-  }
-  
-  /* Estilo para o botão de pesquisa */
-  .search-button {
-    padding: 10px;
-    cursor: pointer;
-  }
-  
+}

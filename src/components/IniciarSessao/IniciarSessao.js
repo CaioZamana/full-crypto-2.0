@@ -41,72 +41,79 @@ const IniciarSessao = () => {
     }
   };
 
-  if (mostrarCard) {
-    return ReactDOM.createPortal(
-      <div className={styles.iniciarSessaoCard} aria-modal="true" role="dialog">
-        <div className={styles.iniciarSessaoContent}>
-          <button
-            className={styles.iniciarSessaoCloseBtn}
-            onClick={toggleCard}
-            aria-label="Fechar"
-          >
-            Fechar
-          </button>
-          <div className={styles.iniciarSessaoFormContainer}>
-            <h2>{isLogin ? 'Login' : 'Cadastre-se'}</h2>
-            {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
-            <input
-              type="text"
-              placeholder="Usuário"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              aria-label="Usuário"
-            />
-            <input
-              type="password"
-              placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              aria-label="Senha"
-            />
-            {!isLogin && (
-              <>
-                <input
-                  type="password"
-                  placeholder="Confirmar Senha"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  aria-label="Confirmar Senha"
-                />
-                <input
-                  type="email"
-                  placeholder="E-mail"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  aria-label="E-mail"
-                />
-              </>
-            )}
-            <button onClick={handleLoginOrCadastro}>
-              {isLogin ? 'Entrar' : 'Cadastrar'}
-            </button>
-            <p onClick={handleToggleForm}>
-              {isLogin
-                ? 'Não tem uma conta? Cadastre-se'
-                : 'Já tem uma conta? Faça login'}
-            </p>
-          </div>
-        </div>
-      </div>,
-      document.body
-    );
-  }
-
   return (
-    <div>
+    <div className={styles.container}>
+      {/* O botão "Iniciar Sessão" sempre visível */}
       <button className={styles.openButton} onClick={toggleCard}>
         Iniciar Sessão
       </button>
+
+      {/* Modal é exibido sobreposto */}
+      {mostrarCard &&
+        ReactDOM.createPortal(
+          <div
+            className={styles.iniciarSessaoCard}
+            aria-modal="true"
+            role="dialog"
+          >
+            <div className={styles.iniciarSessaoContent}>
+              <button
+                className={styles.iniciarSessaoCloseBtn}
+                onClick={toggleCard}
+                aria-label="Fechar"
+              >
+                Fechar
+              </button>
+              <div className={styles.iniciarSessaoFormContainer}>
+                <h2>{isLogin ? 'Login' : 'Cadastre-se'}</h2>
+                {errorMessage && (
+                  <p className={styles.errorMessage}>{errorMessage}</p>
+                )}
+                <input
+                  type="text"
+                  placeholder="Usuário"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  aria-label="Usuário"
+                />
+                <input
+                  type="password"
+                  placeholder="Senha"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  aria-label="Senha"
+                />
+                {!isLogin && (
+                  <>
+                    <input
+                      type="password"
+                      placeholder="Confirmar Senha"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      aria-label="Confirmar Senha"
+                    />
+                    <input
+                      type="email"
+                      placeholder="E-mail"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      aria-label="E-mail"
+                    />
+                  </>
+                )}
+                <button onClick={handleLoginOrCadastro}>
+                  {isLogin ? 'Entrar' : 'Cadastrar'}
+                </button>
+                <p onClick={handleToggleForm}>
+                  {isLogin
+                    ? 'Não tem uma conta? Cadastre-se'
+                    : 'Já tem uma conta? Faça login'}
+                </p>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 };

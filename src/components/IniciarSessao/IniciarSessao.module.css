@@ -1,4 +1,30 @@
-/* Estilo geral do modal */
+.openButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffcc00;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  height: 50px; /* Altura consistente com a SearchBar */
+  transition: background-color 0.3s ease;
+}
+
+.openButton:hover {
+  background-color: #e6b800;
+}
+
+.login {
+  display: flex;
+  align-items: center; /* Alinha o botão verticalmente */
+  height: 50px; /* Mesma altura da barra de busca */
+}
+
+/* Modal */
 .iniciarSessaoCard {
   position: fixed;
   top: 0;
@@ -101,23 +127,6 @@
   color: red;
   font-size: 14px;
   text-align: center;
-}
-
-/* Estilo do botão "Iniciar Sessão" */
-.openButton {
-  background-color: #ffcc00;
-  color: #333;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.openButton:hover {
-  background-color: #e6b800;
 }
 
 /* Responsividade */

@@ -48,22 +48,7 @@ const SearchBar = ({ onSearch }) => {
     fetchSuggestions();
   }, [searchTerm]);
 
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(
-        `https://api.coingecko.com/api/v3/search`,
-        {
-          params: { q: searchTerm },
-        }
-      );
 
-      if (onSearch) {
-        onSearch(response.data);
-      }
-    } catch (error) {
-      console.error('Erro ao pesquisar por criptomoeda:', error);
-    }
-  };
 
   const handleCryptoClick = async (cryptoId) => {
     try {
@@ -91,9 +76,7 @@ const SearchBar = ({ onSearch }) => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <button className="search-button" onClick={handleSearch}>
-        Buscar
-      </button>
+
       {showSuggestions && (
         <ul className="suggestions-list">
           {suggestions.map((coin) => (

@@ -1,18 +1,16 @@
-/* Header.module.css */
-
 .header {
   display: flex;
-  flex-wrap: wrap; /* Permite ajuste automático em telas menores */
-  align-items: center;
-  justify-content: space-between;
+  flex-wrap: wrap; /* Ajusta automaticamente em telas menores */
+  align-items: center; /* Garante alinhamento vertical */
+  justify-content: space-between; /* Espaça os elementos horizontalmente */
   padding: 15px 20px;
   background-color: #333;
   color: #fff;
 }
 
 .logo img {
-  width: 50px; /* Dimensão consistente */
-  height: auto;
+  width: 50px;
+  height: auto; /* Mantém proporção */
 }
 
 .nav {
@@ -37,7 +35,7 @@
 .navList a {
   text-decoration: none;
   color: #fff;
-  font-size: 16px;
+  font-size: 18px; /* Aumentado de 16px para 18px */
   font-weight: 500;
   transition: color 0.3s ease-in-out;
 }
@@ -48,27 +46,27 @@
 
 .searchBarContainer {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
+  align-items: center; /* Centraliza verticalmente o input e botão */
+  gap: 10px; /* Adiciona espaçamento entre input e botão */
+  height: 50px; /* Altura consistente */
 }
 
 .searchBarContainer input {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 16px; /* Aumentado de 14px para 16px */
 }
 
 .searchBarContainer button {
   padding: 10px 15px;
-  margin-left: 5px;
   background-color: #ffcc00;
   border: none;
   border-radius: 4px;
   color: #333;
   font-weight: bold;
   cursor: pointer;
+  font-size: 16px; /* Aumentado de 14px para 16px */
   transition: background-color 0.3s ease-in-out;
 }
 
@@ -77,29 +75,49 @@
 }
 
 .login {
-  margin-top: 10px;
+  display: flex;
+  align-items: center; /* Centraliza o botão verticalmente */
+  justify-content: flex-start; /* Mantém o botão alinhado ao início */
+  height: 50px; /* Mesma altura da barra de busca */
+  margin-left: 15px; /* Pequeno espaçamento entre barra e botão */
 }
 
 /* Responsividade para telas médias (tablets) */
 @media (max-width: 768px) {
   .header {
-    flex-direction: column;
+    flex-direction: column; /* Empilha os itens */
     align-items: center;
   }
 
   .navList {
     flex-direction: column;
-    gap: 10px; /* Ajusta o espaçamento para exibição vertical */
+    gap: 10px;
   }
 
   .searchBarContainer {
-    flex-direction: column;
+    flex-direction: column; /* Empilha input e botão */
+    width: 100%; /* Faz o contêiner ocupar a largura */
     margin-top: 10px;
+    gap: 10px; /* Espaçamento uniforme entre input e botão */
   }
 
   .searchBarContainer input {
-    margin-bottom: 10px;
-    width: 100%;
+    width: 100%; /* Faz o input ocupar toda a largura */
+  }
+
+  .searchBarContainer button {
+    width: 100%; /* Faz o botão ocupar toda a largura */
+  }
+
+  .login {
+    width: 100%; /* Faz o botão "Iniciar Sessão" ocupar a largura */
+    margin-top: 10px; /* Adiciona espaçamento vertical */
+    margin-left: 0; /* Remove margem lateral */
+    justify-content: center; /* Centraliza o botão horizontalmente */
+  }
+
+  .navList a {
+    font-size: 16px; /* Reduzido para telas menores */
   }
 }
 
@@ -110,14 +128,25 @@
   }
 
   .logo img {
-    width: 40px; /* Ajusta a logo para telas pequenas */
+    width: 40px; /* Ajusta o tamanho da logo */
   }
 
   .navList a {
-    font-size: 14px; /* Reduz o tamanho da fonte */
+    font-size: 15px; /* Ajusta o tamanho do texto */
+  }
+
+  .searchBarContainer input {
+    width: 100%; /* Faz o input ocupar toda a largura */
   }
 
   .searchBarContainer button {
-    width: 100%;
+    width: 100%; /* Faz o botão ocupar toda a largura */
+  }
+
+  .login {
+    width: 100%; /* Faz o botão ocupar toda a largura */
+    margin-top: 10px; /* Adiciona espaçamento vertical */
+    margin-left: 0; /* Remove margem lateral */
+    justify-content: center; /* Centraliza o botão horizontalmente */
   }
 }

@@ -1,49 +1,109 @@
 .container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .header {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  .select,
-  .input {
-    margin: 10px 0;
-    padding: 8px;
-    font-size: 16px;
-  }
-  
-  .button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-  }
-  
-  .button:hover {
-    background-color: #45a049;
-  }
-  
-  .table {
-    margin-top: 20px;
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-  }
-  
-  .table th {
-    background-color: #f2f2f2;
-    padding: 10px;
-  }
-  
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.header {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.form {
+  margin-bottom: 20px;
+}
+
+.label {
+  font-size: 16px;
+  margin-bottom: 8px;
+  display: block;
+  color: #333;
+}
+
+.select,
+.input {
+  display: block;
+  width: 40%;
+  margin: 10px auto;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.select:focus,
+.input:focus {
+  border-color: #ffcc00;
+  outline: none;
+}
+
+.button {
+  width: 40%;
+  margin: 20px auto;
+  background-color: #ffcc00;
+  color: #333;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #e6b800;
+}
+
+/* Tabela Responsiva */
+.table {
+  margin-top: 20px;
+  width: 100%; /* Garante 100% do tamanho da tela */
+  max-width: 100%; /* Evita que exceda os limites */
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Centraliza o conteúdo */
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #333;
+  color: #fff;
+  font-size: 16px;
+}
+
+.table td {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Responsividade da tabela */
+.table-container {
+  overflow-x: auto; /* Habilita o scroll horizontal se necessário */
+}
+
+@media (max-width: 768px) {
+  .table th,
   .table td {
-    padding: 10px;
-    border: 1px solid #ddd;
+    font-size: 12px;
+    padding: 8px;
   }
-  
+}
+
+@media (max-width: 480px) {
+  .table th,
+  .table td {
+    font-size: 10px;
+    padding: 6px;
+  }
+}

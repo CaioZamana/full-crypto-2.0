@@ -2,13 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Header.module.css'; // Usando CSS Modules
 import SearchBar from '../SearchBar/SearchBar';
-// import IniciarSessao from '../IniciarSessao/IniciarSessao';
+import IniciarSessao from '../IniciarSessao/IniciarSessao';
 
 const Header = () => {
     return (
         <header className={styles.header}>
             <div className={styles.logo}>
                 <img src="../favicon.ico" alt="Logo" />
+                <br/>
+                <br/>
             </div>
             <nav className={styles.nav}>
                 <ul className={styles.navList}>
@@ -28,9 +30,9 @@ const Header = () => {
             <div className={styles.searchBarContainer}>
                 <SearchBar />
             </div>
-            {/* <div className={styles.login}>
+            <div className={styles.login}>
                 <IniciarSessao />
-            </div> */}
+            </div>
         </header>
     );
 };
