@@ -139,14 +139,26 @@ const PortfolioPage = () => {
             )}
           </label>
           <label>
-            Quantidade:
-            <input
-              type="number"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              step="0.01"
-            />
-          </label>
+  Quantidade:
+  <input
+    type="text"
+    value={quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+    onChange={(e) => {
+      const rawValue = e.target.value.replace(/\./g, '').replace(',', '.'); // Remove pontos e converte vírgulas para pontos
+      if (!isNaN(rawValue)) {
+        setQuantity(rawValue);
+      }
+    }}
+    onBlur={() => {
+      const formattedValue = parseFloat(quantity).toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+      setQuantity(formattedValue.replace(/\./g, '').replace(',', '.')); // Armazena no formato correto
+    }}
+  />
+</label>
+
           <button type="submit">Adicionar</button>
         </form>
 
@@ -162,18 +174,46 @@ const PortfolioPage = () => {
               </tr>
             </thead>
             <tbody>
-              {cryptocurrencies.map((crypto, index) => (
-                <tr key={index}>
-                  <td>{crypto.code}</td>
-                  <td>{crypto.quantity}</td>
-                  <td>${crypto.currentPrice?.toFixed(2) || 'Carregando...'}</td>
-                  <td>${(crypto.quantity * crypto.currentPrice || 0).toFixed(2)}</td>
-                  <td>
-                    <button onClick={() => removeCryptocurrency(crypto.code)}>Remover</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {cryptocurrencies.map((crypto, index) => (
+    <tr key={index}>
+      <td>{crypto.code}</td>
+      <td>
+        {crypto.quantity.toLocaleString('pt-BR', {
+          minimumFractionDigits: 0, // Sem dígitos fracionários para quantidades inteiras
+          maximumFractionDigits: 2, // Permitir até 2 casas decimais para fracionadas
+        })}
+      </td>
+      <td>
+        {crypto.currentPrice
+          ? `${
+              crypto.currentPrice < 0.0001
+                ? crypto.currentPrice.toLocaleString('en-US', {
+                    minimumFractionDigits: 8, // Exibe até 8 casas decimais para moedas muito pequenas
+                    maximumFractionDigits: 10, // No máximo 10 casas decimais
+                  })
+                : crypto.currentPrice.toLocaleString('en-US', {
+                    minimumFractionDigits: 2, // Exibe 2 casas decimais para valores normais
+                    maximumFractionDigits: 3, // Máximo 3 casas decimais
+                  })
+            }`
+          : 'Carregando...'}
+      </td>
+      <td>
+        ${crypto.quantity * crypto.currentPrice
+          ? (crypto.quantity * crypto.currentPrice).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2, // Valor total sempre com 2 casas decimais
+            })
+          : 'Carregando...'}
+      </td>
+      <td>
+        <button onClick={() => removeCryptocurrency(crypto.code)}>Remover</button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
+
           </table>
         </div>
         <div className={styles.totalValue}>
