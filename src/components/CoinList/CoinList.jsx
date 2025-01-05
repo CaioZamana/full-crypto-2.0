@@ -94,7 +94,7 @@ const CoinList = () => {
     <div className={styles.container}>
       <Header />
       <h1 className={styles.header}>Lista de Criptomoedas</h1>
-      <div className={styles.tableContainer}>
+      <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
             <tr>
