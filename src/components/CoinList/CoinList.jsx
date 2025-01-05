@@ -19,13 +19,19 @@ const CoinList = () => {
   const [sortOrder, setSortOrder] = useState('asc');
   const [sortColumn, setSortColumn] = useState('market_cap_rank');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [isLoading, setIsLoading] = useState(false);
+  const itemsPerPage = 250;
   const totalPages = 10;
 
   useEffect(() => {
     const fetchCryptoPage = async () => {
+      if (cachedPages[currentPage]) {
+        setCryptoList(cachedPages[currentPage]);
+        return;
+      }
+
+      setIsLoading(true);
       try {
-        // Tenta buscar dados da API
         const response = await axios.get(
           'https://api.coingecko.com/api/v3/coins/markets',
           {
@@ -38,14 +44,12 @@ const CoinList = () => {
           }
         );
 
-        // Ordena os dados recebidos
         const sortedCryptoList = response.data.sort((a, b) => {
           return sortOrder === 'asc'
             ? a[sortColumn] - b[sortColumn]
             : b[sortColumn] - a[sortColumn];
         });
 
-        // Atualiza o cache e exibe os novos dados
         const updatedCache = { ...cachedPages, [currentPage]: sortedCryptoList };
         setCachedPages(updatedCache);
         localStorage.setItem('cryptoCache', JSON.stringify(updatedCache));
@@ -53,13 +57,13 @@ const CoinList = () => {
       } catch (error) {
         console.error('Erro ao buscar lista das criptomoedas. Usando dados em cache.', error);
 
-        // Usa os dados do cache como fallback
         if (cachedPages[currentPage]) {
           setCryptoList(cachedPages[currentPage]);
         } else {
-          // Caso não haja cache disponível, limpa a lista
           setCryptoList([]);
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -113,55 +117,59 @@ const CoinList = () => {
       <Header />
       <h1 className={styles.header}>Lista de Criptomoedas</h1>
       <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              {columns.map((column) => (
-                <th key={column.key} onClick={() => handleSort(column.key)}>
-                  {column.label}{' '}
-                  {sortColumn === column.key &&
-                    (sortOrder === 'asc' ? '▲' : '▼')}
-                </th>
-              ))}
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cryptoList.length > 0 ? (
-              cryptoList.map((crypto) => (
-                <tr key={crypto.id}>
-                  {columns.map((column) => (
-                    <td key={column.key}>
-                      {column.key === 'current_price' ||
-                      column.key === 'market_cap' ||
-                      column.key === 'total_volume'
-                        ? crypto[column.key]?.toLocaleString('pt-BR', {
-                            style: 'currency',
-                            currency: 'USD',
-                          })
-                        : column.key === 'ath_change_percentage' ||
-                          column.key === 'atl_change_percentage'
-                        ? `${crypto[column.key]?.toFixed(2)}%`
-                        : crypto[column.key]?.toLocaleString('pt-BR')}
-                    </td>
-                  ))}
-                  <td>
-                    <button
-                      className={styles.detailsButton}
-                      onClick={() => handleCryptoDetails(crypto.id)}
-                    >
-                      Detalhes
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
+        {isLoading ? (
+          <p>Carregando dados...</p>
+        ) : (
+          <table className={styles.table}>
+            <thead>
               <tr>
-                <td colSpan={columns.length + 1}>Nenhum dado disponível.</td>
+                {columns.map((column) => (
+                  <th key={column.key} onClick={() => handleSort(column.key)}>
+                    {column.label}{' '}
+                    {sortColumn === column.key &&
+                      (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                ))}
+                <th>Ações</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {cryptoList.length > 0 ? (
+                cryptoList.map((crypto) => (
+                  <tr key={crypto.id}>
+                    {columns.map((column) => (
+                      <td key={column.key}>
+                        {column.key === 'current_price' ||
+                        column.key === 'market_cap' ||
+                        column.key === 'total_volume'
+                          ? crypto[column.key]?.toLocaleString('pt-BR', {
+                              style: 'currency',
+                              currency: 'USD',
+                            })
+                          : column.key === 'ath_change_percentage' ||
+                            column.key === 'atl_change_percentage'
+                          ? `${crypto[column.key]?.toFixed(2)}%`
+                          : crypto[column.key]?.toLocaleString('pt-BR')}
+                      </td>
+                    ))}
+                    <td>
+                      <button
+                        className={styles.detailsButton}
+                        onClick={() => handleCryptoDetails(crypto.id)}
+                      >
+                        Detalhes
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={columns.length + 1}>Nenhum dado disponível.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
       <div className={styles.pagination}>
         <button
