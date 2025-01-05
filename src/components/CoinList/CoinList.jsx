@@ -24,11 +24,8 @@ const CoinList = () => {
 
   useEffect(() => {
     const fetchCryptoPage = async () => {
-      if (cachedPages[currentPage]) {
-        setCryptoList(cachedPages[currentPage]); // Exibe o cache inicialmente
-      }
-
       try {
+        // Tenta buscar dados da API
         const response = await axios.get(
           'https://api.coingecko.com/api/v3/coins/markets',
           {
@@ -41,26 +38,26 @@ const CoinList = () => {
           }
         );
 
+        // Ordena os dados recebidos
         const sortedCryptoList = response.data.sort((a, b) => {
           return sortOrder === 'asc'
             ? a[sortColumn] - b[sortColumn]
             : b[sortColumn] - a[sortColumn];
         });
 
+        // Atualiza o cache e exibe os novos dados
         const updatedCache = { ...cachedPages, [currentPage]: sortedCryptoList };
-
-        // Atualiza o estado e salva no localStorage
         setCachedPages(updatedCache);
         localStorage.setItem('cryptoCache', JSON.stringify(updatedCache));
         setCryptoList(sortedCryptoList);
       } catch (error) {
         console.error('Erro ao buscar lista das criptomoedas. Usando dados em cache.', error);
 
+        // Usa os dados do cache como fallback
         if (cachedPages[currentPage]) {
-          // Caso falhe e o cache exista, exibe o cache
           setCryptoList(cachedPages[currentPage]);
         } else {
-          // Se não houver cache disponível, limpa a lista
+          // Caso não haja cache disponível, limpa a lista
           setCryptoList([]);
         }
       }
