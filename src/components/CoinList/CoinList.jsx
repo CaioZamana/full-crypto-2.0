@@ -10,16 +10,24 @@ Modal.setAppElement('#root');
 
 const CoinList = () => {
   const [cryptoList, setCryptoList] = useState([]);
+  const [cachedPages, setCachedPages] = useState(() => {
+    const savedCache = localStorage.getItem('cryptoCache');
+    return savedCache ? JSON.parse(savedCache) : {};
+  });
   const [selectedCrypto, setSelectedCrypto] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState('asc');
   const [sortColumn, setSortColumn] = useState('market_cap_rank');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 25;
+  const itemsPerPage = 10;
   const totalPages = 10;
 
   useEffect(() => {
     const fetchCryptoPage = async () => {
+      if (cachedPages[currentPage]) {
+        setCryptoList(cachedPages[currentPage]); // Exibe o cache inicialmente
+      }
+
       try {
         const response = await axios.get(
           'https://api.coingecko.com/api/v3/coins/markets',
@@ -39,14 +47,27 @@ const CoinList = () => {
             : b[sortColumn] - a[sortColumn];
         });
 
+        const updatedCache = { ...cachedPages, [currentPage]: sortedCryptoList };
+
+        // Atualiza o estado e salva no localStorage
+        setCachedPages(updatedCache);
+        localStorage.setItem('cryptoCache', JSON.stringify(updatedCache));
         setCryptoList(sortedCryptoList);
       } catch (error) {
-        console.error('Erro ao buscar lista das criptomoedas:', error);
+        console.error('Erro ao buscar lista das criptomoedas. Usando dados em cache.', error);
+
+        if (cachedPages[currentPage]) {
+          // Caso falhe e o cache exista, exibe o cache
+          setCryptoList(cachedPages[currentPage]);
+        } else {
+          // Se não houver cache disponível, limpa a lista
+          setCryptoList([]);
+        }
       }
     };
 
     fetchCryptoPage();
-  }, [currentPage, sortColumn, sortOrder]);
+  }, [currentPage, sortColumn, sortOrder, cachedPages]);
 
   const handleCryptoDetails = async (cryptoId) => {
     try {
@@ -109,33 +130,39 @@ const CoinList = () => {
             </tr>
           </thead>
           <tbody>
-            {cryptoList.map((crypto) => (
-              <tr key={crypto.id}>
-                {columns.map((column) => (
-                  <td key={column.key}>
-                    {column.key === 'current_price' ||
-                    column.key === 'market_cap' ||
-                    column.key === 'total_volume'
-                      ? crypto[column.key]?.toLocaleString('pt-BR', {
-                          style: 'currency',
-                          currency: 'USD',
-                        })
-                      : column.key === 'ath_change_percentage' ||
-                        column.key === 'atl_change_percentage'
-                      ? `${crypto[column.key]?.toFixed(2)}%`
-                      : crypto[column.key]?.toLocaleString('pt-BR')}
+            {cryptoList.length > 0 ? (
+              cryptoList.map((crypto) => (
+                <tr key={crypto.id}>
+                  {columns.map((column) => (
+                    <td key={column.key}>
+                      {column.key === 'current_price' ||
+                      column.key === 'market_cap' ||
+                      column.key === 'total_volume'
+                        ? crypto[column.key]?.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'USD',
+                          })
+                        : column.key === 'ath_change_percentage' ||
+                          column.key === 'atl_change_percentage'
+                        ? `${crypto[column.key]?.toFixed(2)}%`
+                        : crypto[column.key]?.toLocaleString('pt-BR')}
+                    </td>
+                  ))}
+                  <td>
+                    <button
+                      className={styles.detailsButton}
+                      onClick={() => handleCryptoDetails(crypto.id)}
+                    >
+                      Detalhes
+                    </button>
                   </td>
-                ))}
-                <td>
-                  <button
-                    className={styles.detailsButton}
-                    onClick={() => handleCryptoDetails(crypto.id)}
-                  >
-                    Detalhes
-                  </button>
-                </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={columns.length + 1}>Nenhum dado disponível.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
