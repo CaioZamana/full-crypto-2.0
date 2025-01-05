@@ -13,7 +13,7 @@ import CoinList from './components/CoinList/CoinList.jsx';
 import ContactPage from './components/ContactPage/ContactPage.js';
 import PortfolioPage from './components/PortfolioPage/PortfolioPage.jsx';
 import TradingChart from './components/TradingChart/TradingChart.js';
-import BTCPage from './components/btc/btc.js';
+import BTCPage from './components/Btc/btc.js';
 import CoinMultList from './components/CoinMultList/CoinMultList.js';
 import PrivacyPolicy from './components/PrivacyPolicy/PrivacyPolicy.js';
 import CryptoConverter from './components/CryptoConverter/CryptoConverter.js';
