@@ -6,11 +6,14 @@ import Footer from '../Footer/Footer';
 
 const PortfolioPage = () => {
   const [cryptocurrencies, setCryptocurrencies] = useState([]);
-  const [cryptoOptions, setCryptoOptions] = useState([]);
+  const [cryptoOptions, setCryptoOptions] = useState(() => {
+    const cachedOptions = localStorage.getItem('cryptoOptions');
+    return cachedOptions ? JSON.parse(cachedOptions) : [];
+  });
   const [conversionRate, setConversionRate] = useState(1);
   const [code, setCode] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [loadingOptions, setLoadingOptions] = useState(true);
+  const [loadingOptions, setLoadingOptions] = useState(cryptoOptions.length === 0);
 
   useEffect(() => {
     // Load saved portfolio from localStorage
@@ -19,11 +22,18 @@ const PortfolioPage = () => {
 
     // Fetch BRL to USD conversion rate
     const fetchConversionRate = async () => {
+      const cachedRate = localStorage.getItem('conversionRate');
+      if (cachedRate) {
+        setConversionRate(parseFloat(cachedRate));
+        return;
+      }
       try {
         const response = await axios.get(
           'https://api.coingecko.com/api/v3/simple/price?ids=usd&vs_currencies=brl'
         );
-        setConversionRate(response.data.usd.brl || 1);
+        const rate = response.data.usd.brl || 1;
+        setConversionRate(rate);
+        localStorage.setItem('conversionRate', rate);
       } catch (error) {
         console.error('Erro ao obter taxa de conversão de BRL para USD:', error);
       }
@@ -31,8 +41,12 @@ const PortfolioPage = () => {
 
     fetchConversionRate();
 
-    // Fetch cryptocurrency options
+    // Fetch cryptocurrency options with caching
     const fetchCryptoOptions = async () => {
+      if (cryptoOptions.length > 0) {
+        setLoadingOptions(false);
+        return;
+      }
       try {
         const response = await axios.get(
           'https://api.coingecko.com/api/v3/coins/markets',
@@ -49,7 +63,9 @@ const PortfolioPage = () => {
           value: crypto.id,
           label: crypto.symbol.toUpperCase(),
         }));
-        setCryptoOptions(options.sort((a, b) => a.label.localeCompare(b.label)));
+        const sortedOptions = options.sort((a, b) => a.label.localeCompare(b.label));
+        setCryptoOptions(sortedOptions);
+        localStorage.setItem('cryptoOptions', JSON.stringify(sortedOptions));
         setLoadingOptions(false);
       } catch (error) {
         console.error('Erro ao buscar criptoativos:', error);
@@ -57,7 +73,7 @@ const PortfolioPage = () => {
     };
 
     fetchCryptoOptions();
-  }, []);
+  }, [cryptoOptions]);
 
   useEffect(() => {
     // Save portfolio to localStorage whenever it changes
@@ -83,11 +99,18 @@ const PortfolioPage = () => {
   };
 
   const fetchCryptocurrencyPrice = async (cryptoCode) => {
+    const cachedPrices = JSON.parse(localStorage.getItem('cryptoPrices')) || {};
+    if (cachedPrices[cryptoCode]) {
+      return cachedPrices[cryptoCode];
+    }
     try {
       const response = await axios.get(
         `https://api.coingecko.com/api/v3/simple/price?ids=${cryptoCode}&vs_currencies=usd`
       );
-      return response.data[cryptoCode]?.usd || null;
+      const price = response.data[cryptoCode]?.usd || null;
+      cachedPrices[cryptoCode] = price;
+      localStorage.setItem('cryptoPrices', JSON.stringify(cachedPrices));
+      return price;
     } catch (error) {
       console.error('Erro ao obter preço da criptomoeda:', error);
       return null;
