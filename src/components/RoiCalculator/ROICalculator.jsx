@@ -36,7 +36,7 @@ const ROICalculator = () => {
             params: {
               vs_currency: "usd",
               order: "market_cap_desc",
-              per_page: 200,
+              per_page: 500,
               page: 1,
             },
           }
