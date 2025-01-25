@@ -5,6 +5,8 @@ import Header from "../Header/Header";
 import styles from "./ROICalculator.module.css";
 
 const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos
+const ITEMS_PER_PAGE = 100; // Máximo permitido pela API
+const TOTAL_PAGES = 5; // Número de páginas para buscar (100 moedas por página)
 
 const ROICalculator = () => {
   const [cryptoList, setCryptoList] = useState([]);
@@ -17,32 +19,39 @@ const ROICalculator = () => {
 
   const isCacheValid = (timestamp) => Date.now() - timestamp < CACHE_EXPIRATION;
 
-  // Fetch lista de criptomoedas com SWR
   useEffect(() => {
-    const fetchCryptos = async () => {
+    const fetchAllCryptos = async () => {
       const cachedList = JSON.parse(localStorage.getItem("cryptoList")) || [];
       const cacheTimestamp = localStorage.getItem("cryptoListTimestamp");
 
       // Usar cache se válido
       if (cachedList.length > 0 && cacheTimestamp && isCacheValid(cacheTimestamp)) {
         setCryptoList(cachedList);
+        return;
       }
 
-      // Buscar dados atualizados da API (Revalidate)
+      // Buscar dados de todas as páginas da API
       try {
-        const response = await axios.get(
-          "https://api.coingecko.com/api/v3/coins/markets",
-          {
-            params: {
-              vs_currency: "usd",
-              order: "market_cap_desc",
-              per_page: 500,
-              page: 1,
-            },
-          }
-        );
-        setCryptoList(response.data);
-        localStorage.setItem("cryptoList", JSON.stringify(response.data));
+        const allCryptos = [];
+        for (let page = 1; page <= TOTAL_PAGES; page++) {
+          const response = await axios.get(
+            "https://api.coingecko.com/api/v3/coins/markets",
+            {
+              params: {
+                vs_currency: "usd",
+                order: "market_cap_desc",
+                per_page: ITEMS_PER_PAGE,
+                page,
+              },
+            }
+          );
+          allCryptos.push(...response.data);
+        }
+
+        setCryptoList(allCryptos);
+
+        // Salvar no cache
+        localStorage.setItem("cryptoList", JSON.stringify(allCryptos));
         localStorage.setItem("cryptoListTimestamp", Date.now());
       } catch (error) {
         console.error("Erro ao buscar lista de criptomoedas.", error);
@@ -50,10 +59,9 @@ const ROICalculator = () => {
       }
     };
 
-    fetchCryptos();
+    fetchAllCryptos();
   }, []);
 
-  // Fetch dados de uma criptomoeda selecionada com SWR
   const handleCryptoSelection = async (cryptoId) => {
     setError("");
     setCurrentCrypto(cryptoId);
@@ -64,13 +72,12 @@ const ROICalculator = () => {
     const cachedPrices = JSON.parse(localStorage.getItem("cryptoPrices")) || {};
     const cacheTimestamp = JSON.parse(localStorage.getItem("cryptoPricesTimestamp")) || {};
 
-    // Usar cache se válido
     if (cachedPrices[cryptoId] && cacheTimestamp[cryptoId] && isCacheValid(cacheTimestamp[cryptoId])) {
       setCurrentPrice(cachedPrices[cryptoId].price);
       setMarketCap(cachedPrices[cryptoId].marketCap);
+      return;
     }
 
-    // Buscar dados atualizados da API (Revalidate)
     try {
       const response = await axios.get(
         "https://api.coingecko.com/api/v3/coins/markets",
@@ -91,7 +98,6 @@ const ROICalculator = () => {
       setCurrentPrice(cryptoData.current_price);
       setMarketCap(cryptoData.market_cap);
 
-      // Atualizar cache
       cachedPrices[cryptoId] = {
         price: cryptoData.current_price,
         marketCap: cryptoData.market_cap,
