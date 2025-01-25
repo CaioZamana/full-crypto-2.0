@@ -6,7 +6,7 @@ import styles from "./ROICalculator.module.css";
 
 const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos
 const ITEMS_PER_PAGE = 100; // Máximo permitido pela API
-const TOTAL_PAGES = 5; // Número de páginas para buscar (500 moedas no total)
+const TOTAL_PAGES = 3; // Número de páginas para buscar (500 moedas no total)
 
 const ROICalculator = () => {
   const [cryptoList, setCryptoList] = useState([]);
