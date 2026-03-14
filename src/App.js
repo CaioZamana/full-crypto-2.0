@@ -1,11 +1,11 @@
 import './App.css';
+import { Toaster } from 'react-hot-toast';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-
 } from "react-router-dom";
-
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 import About from './components/About/About.js';
 import MarketExplorer from './components/MarketExplorer/MarketExplorer.js';
@@ -25,6 +25,8 @@ import ROICalculator from './components/RoiCalculator/ROICalculator';
 function App() {
   return (
     <div>
+      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+      <ErrorBoundary>
       <Router>
         <Routes>
           <Route path="/TrendingCoins" element={<TrendingCoins/>} />
@@ -44,6 +46,7 @@ function App() {
           <Route path="/CountdownTimer" element={<CountdownTimer/>}/>
         </Routes>
       </Router>
+      </ErrorBoundary>
     </div>
   );
 }

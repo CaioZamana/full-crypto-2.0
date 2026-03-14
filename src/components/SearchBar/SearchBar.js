@@ -1,70 +1,47 @@
-// SearchBar.js
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useMemo } from 'react';
 import './SearchBar.module.css';
 import CryptoDetailsCardModalSearch from '../CryptoDetailsCardModalSearch';
+import coingecko from '../../services/coingecko';
+import { useDebounce } from '../../hooks/useDebounce';
+import { useCachedFetch } from '../../hooks/useCachedFetch';
+import useCoinDetails from '../../hooks/useCoinDetails';
 
-const SearchBar = ({ onSearch }) => {
+// Stable reference — same cache key used by CryptoConverter, ROICalculator, PortfolioPage.
+// Only one HTTP request per TTL window across all components.
+const fetchMarketList = () =>
+  coingecko.getMarkets({ per_page: 250, page: 1 }).then((r) => r.data);
+
+const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [selectedCrypto, setSelectedCrypto] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
 
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      try {
-        if (searchTerm.trim() === '') {
-          setSuggestions([]);
-          return;
-        }
+  // 400 ms debounce — eliminates per-keystroke API calls.
+  const debouncedSearch = useDebounce(searchTerm, 400);
 
-        const response = await axios.get(
-          `https://api.coingecko.com/api/v3/coins/markets`,
-          {
-            params: {
-              vs_currency: 'usd',
-              order: 'market_cap_desc',
-              per_page: 250,
-              page: 1,
-              sparkline: false,
-            },
-          }
-        );
+  // Cached 250-coin list; zero extra fetches when the cache is fresh.
+  const { data: coinList } = useCachedFetch('cryptoMarketList', fetchMarketList);
 
-        const filteredSuggestions = response.data.filter(
-          (coin) =>
-            coin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            coin.symbol.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+  const { data: selectedCrypto, fetchDetails } = useCoinDetails();
 
-        setSuggestions(filteredSuggestions.slice(0, 5));
-        setShowSuggestions(true);
-      } catch (error) {
-        console.error('Erro ao buscar sugestões:', error);
-      }
-    };
-
-    fetchSuggestions();
-  }, [searchTerm]);
-
-
+  // Pure client-side filter — no network involved.
+  const suggestions = useMemo(() => {
+    if (!debouncedSearch.trim() || !coinList) return [];
+    const term = debouncedSearch.toLowerCase();
+    return coinList
+      .filter(
+        (coin) =>
+          coin.name.toLowerCase().includes(term) ||
+          coin.symbol.toLowerCase().includes(term)
+      )
+      .slice(0, 5);
+  }, [debouncedSearch, coinList]);
 
   const handleCryptoClick = async (cryptoId) => {
-    try {
-      const response = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${cryptoId}`
-      );
-
-      setSelectedCrypto(response.data);
-      setShowSuggestions(false); // Oculta a lista de sugestões ao clicar em uma moeda
-    } catch (error) {
-      console.error('Erro ao buscar detalhes da criptomoeda:', error);
-    }
+    await fetchDetails(cryptoId);
+    setShowSuggestions(false);
   };
 
   const handleBackButtonClick = () => {
-    setSelectedCrypto(null);
     setShowSuggestions(true);
   };
 
@@ -77,7 +54,7 @@ const SearchBar = ({ onSearch }) => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
-      {showSuggestions && (
+      {showSuggestions && suggestions.length > 0 && (
         <ul className="suggestions-list">
           {suggestions.map((coin) => (
             <li
@@ -90,6 +67,7 @@ const SearchBar = ({ onSearch }) => {
           ))}
         </ul>
       )}
+
       <CryptoDetailsCardModalSearch
         cryptoDetails={selectedCrypto}
         closeModal={handleBackButtonClick}

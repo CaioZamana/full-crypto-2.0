@@ -37,10 +37,47 @@
   color: #fff;
   font-size: 16px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .table th:hover {
   background-color: #444;
+}
+
+.activeColumn {
+  background-color: #ffcc00 !important;
+  color: #333 !important;
+}
+
+.sortArrow {
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+/* Skeleton loading */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeletonRow td {
+  padding: 12px;
+}
+
+.skeletonCell {
+  display: block;
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px !important;
+  color: #888;
+  font-size: 15px;
 }
 
 .table td {

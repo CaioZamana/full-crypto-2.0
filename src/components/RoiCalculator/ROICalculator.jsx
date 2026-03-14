@@ -1,65 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import styles from "./ROICalculator.module.css";
+import { useCachedFetch } from "../../hooks/useCachedFetch";
 
-const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos
-const ITEMS_PER_PAGE = 100; // Máximo permitido pela API
-const TOTAL_PAGES = 3; // Número de páginas para buscar (500 moedas no total)
+const PRICE_TTL = 10 * 60 * 1000; // 10 minutes
+
+// Stable fetcher — shared 'cryptoMarketList' cache key is also used by
+// SearchBar, CryptoConverter and PortfolioPage; only one fetch per TTL window.
+const fetchMarketList = () =>
+  axios
+    .get("https://api.coingecko.com/api/v3/coins/markets", {
+      params: {
+        vs_currency: "usd",
+        order: "market_cap_desc",
+        per_page: 250,
+        page: 1,
+      },
+    })
+    .then((r) => r.data);
+
+const isCacheValid = (ts) => Boolean(ts) && Date.now() - ts < PRICE_TTL;
 
 const ROICalculator = () => {
-  const [cryptoList, setCryptoList] = useState([]);
+  const { data: cryptoList = [] } = useCachedFetch("cryptoMarketList", fetchMarketList);
+
   const [currentCrypto, setCurrentCrypto] = useState(null);
   const [currentPrice, setCurrentPrice] = useState(null);
   const [marketCap, setMarketCap] = useState(null);
   const [investment, setInvestment] = useState("");
   const [projections, setProjections] = useState([]);
   const [error, setError] = useState("");
-
-  const isCacheValid = (timestamp) => Date.now() - timestamp < CACHE_EXPIRATION;
-
-  useEffect(() => {
-    const fetchCryptos = async () => {
-      const cachedList = JSON.parse(localStorage.getItem("cryptoList")) || [];
-      const cacheTimestamp = localStorage.getItem("cryptoListTimestamp");
-
-      // Servir dados do cache imediatamente, se válido
-      if (cachedList.length > 0 && cacheTimestamp && isCacheValid(cacheTimestamp)) {
-        setCryptoList(cachedList);
-      }
-
-      // Revalidar dados em segundo plano
-      try {
-        const allCryptos = [];
-        for (let page = 1; page <= TOTAL_PAGES; page++) {
-          const response = await axios.get(
-            "https://api.coingecko.com/api/v3/coins/markets",
-            {
-              params: {
-                vs_currency: "usd",
-                order: "market_cap_desc",
-                per_page: ITEMS_PER_PAGE,
-                page,
-              },
-            }
-          );
-          allCryptos.push(...response.data);
-        }
-
-        setCryptoList(allCryptos);
-
-        // Atualizar cache
-        localStorage.setItem("cryptoList", JSON.stringify(allCryptos));
-        localStorage.setItem("cryptoListTimestamp", Date.now());
-      } catch (error) {
-        console.error("Erro ao buscar lista de criptomoedas.", error);
-        setError("Não foi possível carregar a lista de criptomoedas. Tente novamente mais tarde.");
-      }
-    };
-
-    fetchCryptos();
-  }, []);
 
   const handleCryptoSelection = async (cryptoId) => {
     setError("");
@@ -68,26 +40,21 @@ const ROICalculator = () => {
     setMarketCap(null);
     setProjections([]);
 
-    const cachedPrices = JSON.parse(localStorage.getItem("cryptoPrices")) || {};
-    const cacheTimestamp = JSON.parse(localStorage.getItem("cryptoPricesTimestamp")) || {};
+    // cryptoMarketData stores { price, marketCap } per coin — separate from
+    // the simple price cache used by CryptoConverter / PortfolioPage.
+    const cachedData = JSON.parse(localStorage.getItem("cryptoMarketData")) || {};
+    const cachedTs = JSON.parse(localStorage.getItem("cryptoMarketDataTimestamp")) || {};
 
-    // Servir dados do cache imediatamente, se válido
-    if (cachedPrices[cryptoId] && cacheTimestamp[cryptoId] && isCacheValid(cacheTimestamp[cryptoId])) {
-      setCurrentPrice(cachedPrices[cryptoId].price);
-      setMarketCap(cachedPrices[cryptoId].marketCap);
+    if (cachedData[cryptoId] && isCacheValid(cachedTs[cryptoId])) {
+      setCurrentPrice(cachedData[cryptoId].price);
+      setMarketCap(cachedData[cryptoId].marketCap);
       return;
     }
 
-    // Revalidar dados em segundo plano
     try {
       const response = await axios.get(
         "https://api.coingecko.com/api/v3/coins/markets",
-        {
-          params: {
-            vs_currency: "usd",
-            ids: cryptoId,
-          },
-        }
+        { params: { vs_currency: "usd", ids: cryptoId } }
       );
       const cryptoData = response.data[0];
 
@@ -99,16 +66,12 @@ const ROICalculator = () => {
       setCurrentPrice(cryptoData.current_price);
       setMarketCap(cryptoData.market_cap);
 
-      cachedPrices[cryptoId] = {
-        price: cryptoData.current_price,
-        marketCap: cryptoData.market_cap,
-      };
-      cacheTimestamp[cryptoId] = Date.now();
-
-      localStorage.setItem("cryptoPrices", JSON.stringify(cachedPrices));
-      localStorage.setItem("cryptoPricesTimestamp", JSON.stringify(cacheTimestamp));
-    } catch (error) {
-      console.error("Erro ao buscar dados da criptomoeda.", error);
+      cachedData[cryptoId] = { price: cryptoData.current_price, marketCap: cryptoData.market_cap };
+      cachedTs[cryptoId] = Date.now();
+      localStorage.setItem("cryptoMarketData", JSON.stringify(cachedData));
+      localStorage.setItem("cryptoMarketDataTimestamp", JSON.stringify(cachedTs));
+    } catch (err) {
+      console.error("Erro ao buscar dados da criptomoeda.", err);
       setError("Não foi possível buscar os dados da criptomoeda. Tente novamente mais tarde.");
     }
   };
@@ -116,11 +79,10 @@ const ROICalculator = () => {
   const formatPrice = (price) => {
     if (price >= 1) {
       return `$${price.toFixed(2)}`;
-    } else {
-      const [mantissa, exponent] = price.toExponential(4).split("e");
-      const formattedExponent = exponent.replace("-", "⁻");
-      return `${mantissa} × 10${formattedExponent}`;
     }
+    const [mantissa, exponent] = price.toExponential(4).split("e");
+    const formattedExponent = exponent.replace("-", "⁻");
+    return `${mantissa} × 10${formattedExponent}`;
   };
 
   const calculateProjections = () => {
@@ -173,6 +135,14 @@ const ROICalculator = () => {
         {error && (
           <div className={styles.errorContainer}>
             <p className={styles.error}>{error}</p>
+            {currentCrypto && (
+              <button
+                className={styles.retryButton}
+                onClick={() => handleCryptoSelection(currentCrypto)}
+              >
+                Tentar novamente
+              </button>
+            )}
           </div>
         )}
 

@@ -1,13 +1,11 @@
 // MarketExplorer.js
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useTable, useSortBy, useFilters } from 'react-table';
 import './MarketExplorer.module.css';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-
-const CoinGeckoAPI = 'https://api.coingecko.com/api/v3';
+import coingecko from '../../services/coingecko';
 
 const MarketExplorer = () => {
     const [markets, setMarkets] = useState([]);
@@ -16,7 +14,7 @@ const MarketExplorer = () => {
     const [tickers, setTickers] = useState([]);
 
     useEffect(() => {
-        axios.get(`${CoinGeckoAPI}/exchanges`)
+        coingecko.getExchanges()
             .then(response => {
                 const sortedMarkets = response.data.sort((a, b) => b.trade_volume_24h_btc - a.trade_volume_24h_btc);
                 setMarkets(sortedMarkets);
@@ -28,7 +26,7 @@ const MarketExplorer = () => {
         const fetchTickers = async () => {
             if (selectedMarket) {
                 try {
-                    const response = await axios.get(`${CoinGeckoAPI}/exchanges/${selectedMarket}/tickers`);
+                    const response = await coingecko.getExchangeTickers(selectedMarket);
                     setTickers(response.data.tickers);
                 } catch (error) {
                     console.error('Error fetching tickers:', error);
@@ -41,7 +39,7 @@ const MarketExplorer = () => {
 
     const handleMarketClick = async (marketId) => {
         try {
-            const response = await axios.get(`${CoinGeckoAPI}/exchanges/${marketId}`);
+            const response = await coingecko.getExchangeDetails(marketId);
             setMarketInfo(response.data);
             setSelectedMarket(marketId);
     

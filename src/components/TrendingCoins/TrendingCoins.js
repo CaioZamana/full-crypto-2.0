@@ -1,61 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import CryptoDetailsCard from '../CryptoDetailsCard/CryptoDetailsCard';
 import Modal from 'react-modal';
 import styles from './TrendingCoins.module.css';
+import useTrendingCoins from '../../hooks/useTrendingCoins';
+import useCoinDetails from '../../hooks/useCoinDetails';
 
 Modal.setAppElement('#root');
 
 const TrendingCoins = () => {
-  const [trendingCoins, setTrendingCoins] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedCoin, setSelectedCoin] = useState(null);
+  const { data: trendingCoins, loading, error } = useTrendingCoins();
+  const { data: selectedCoin, fetchDetails } = useCoinDetails();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchTrendingCoins = async () => {
-      try {
-        const response = await axios.get(
-          'https://api.coingecko.com/api/v3/search/trending'
-        );
-        setTrendingCoins(response.data.coins || []);
-        setLoading(false);
-      } catch (error) {
-        console.error('Erro ao buscar moedas de tendência:', error);
-        setError('Erro ao carregar moedas de tendência. Tente novamente mais tarde.');
-        setLoading(false);
-      }
-    };
-
-    fetchTrendingCoins();
-  }, []);
-
   const handleCoinClick = async (coin) => {
-    try {
-      const coinId = coin.id || coin.item.id;
-      if (!coinId) {
-        console.error('ID da moeda não encontrado:', coin);
-        return;
-      }
-
-      const response = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${coinId}`
-      );
-
-      setSelectedCoin(response.data);
-      setModalIsOpen(true);
-    } catch (error) {
-      console.error('Erro ao buscar detalhes da criptomoeda:', error);
-    }
+    const coinId = coin.id || coin.item?.id;
+    if (!coinId) return;
+    await fetchDetails(coinId);
+    setModalIsOpen(true);
   };
 
-  const handleCloseCryptoDetailsCard = () => {
-    setSelectedCoin(null);
-    setModalIsOpen(false);
-  };
+  const handleClose = () => setModalIsOpen(false);
 
   return (
     <div>
@@ -100,16 +66,13 @@ const TrendingCoins = () => {
 
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={handleCloseCryptoDetailsCard}
+        onRequestClose={handleClose}
         contentLabel="Detalhes da Criptomoeda"
         className={styles.modalContent}
         overlayClassName={styles.modalOverlay}
       >
         {selectedCoin ? (
-          <CryptoDetailsCard
-            cryptoDetails={selectedCoin}
-            closeModal={handleCloseCryptoDetailsCard}
-          />
+          <CryptoDetailsCard cryptoDetails={selectedCoin} closeModal={handleClose} />
         ) : (
           <p>Carregando detalhes...</p>
         )}

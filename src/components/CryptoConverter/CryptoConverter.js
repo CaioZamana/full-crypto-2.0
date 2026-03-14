@@ -1,95 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import styles from './CryptoConverter.module.css';
+import { useCachedFetch } from '../../hooks/useCachedFetch';
+import coingecko from '../../services/coingecko';
+import { formatCryptoAmount } from '../../utils/formatters';
 
-const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos em milissegundos
+const PRICE_TTL = 10 * 60 * 1000; // 10 minutes
+
+const fetchMarketList = () =>
+  coingecko.getMarkets({ per_page: 250, page: 1 }).then((r) => r.data);
+
+const isCacheValid = (ts) => Boolean(ts) && Date.now() - ts < PRICE_TTL;
+
+const fetchPrice = async (crypto) => {
+  const cachedPrices = JSON.parse(localStorage.getItem('cryptoPrices')) || {};
+  const cacheTimestamps = JSON.parse(localStorage.getItem('cryptoPricesTimestamp')) || {};
+
+  if (cachedPrices[crypto] !== undefined && isCacheValid(cacheTimestamps[crypto])) {
+    return cachedPrices[crypto];
+  }
+
+  const response = await coingecko.getSimplePrice(crypto);
+  const price = response.data[crypto]?.usd;
+
+  if (price !== undefined) {
+    cachedPrices[crypto] = price;
+    cacheTimestamps[crypto] = Date.now();
+    localStorage.setItem('cryptoPrices', JSON.stringify(cachedPrices));
+    localStorage.setItem('cryptoPricesTimestamp', JSON.stringify(cacheTimestamps));
+  }
+
+  return price;
+};
 
 const CryptoConverter = () => {
-  const [cryptoList, setCryptoList] = useState([]);
+  const { data: cryptoList = [], loading: listLoading } = useCachedFetch(
+    'cryptoMarketList',
+    fetchMarketList
+  );
+
   const [fromCrypto, setFromCrypto] = useState('');
   const [toCrypto, setToCrypto] = useState('');
   const [amount, setAmount] = useState(1);
   const [convertedAmount, setConvertedAmount] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Função para verificar se o cache expirou
-  const isCacheValid = (timestamp) => {
-    return Date.now() - timestamp < CACHE_EXPIRATION;
-  };
-
-  useEffect(() => {
-    const fetchCryptoList = async () => {
-      const cachedList = JSON.parse(localStorage.getItem('cryptoList')) || [];
-      const cacheTimestamp = localStorage.getItem('cryptoListTimestamp');
-
-      // Usar cache se disponível e válido
-      if (cachedList.length > 0 && cacheTimestamp && isCacheValid(cacheTimestamp)) {
-        setCryptoList(cachedList);
-      }
-
-      // Tentar buscar dados atualizados da API
-      try {
-        const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
-          params: {
-            vs_currency: 'usd',
-            order: 'market_cap_desc',
-            per_page: 250,
-            page: 1,
-            sparkline: false,
-          },
-        });
-        setCryptoList(response.data);
-        localStorage.setItem('cryptoList', JSON.stringify(response.data));
-        localStorage.setItem('cryptoListTimestamp', Date.now());
-      } catch (error) {
-        console.error('Erro ao buscar lista de criptomoedas. Usando apenas o cache.', error);
-      }
-    };
-
-    fetchCryptoList();
-  }, []);
-
-  const fetchPrice = async (crypto) => {
-    const cachedPrices = JSON.parse(localStorage.getItem('cryptoPrices')) || {};
-    const cacheTimestamp = JSON.parse(localStorage.getItem('cryptoPricesTimestamp')) || {};
-
-    // Retornar preço do cache se válido
-    if (cachedPrices[crypto] && cacheTimestamp[crypto] && isCacheValid(cacheTimestamp[crypto])) {
-      return cachedPrices[crypto];
-    }
-
-    // Buscar preço atualizado da API
-    try {
-      const response = await axios.get(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${crypto}&vs_currencies=usd`
-      );
-      const price = response.data[crypto]?.usd;
-
-      if (price !== undefined) {
-        cachedPrices[crypto] = price;
-        cacheTimestamp[crypto] = Date.now();
-        localStorage.setItem('cryptoPrices', JSON.stringify(cachedPrices));
-        localStorage.setItem('cryptoPricesTimestamp', JSON.stringify(cacheTimestamp));
-      }
-
-      return price;
-    } catch (error) {
-      console.error(`Erro ao buscar preço para ${crypto}. Usando apenas o cache.`, error);
-      return cachedPrices[crypto] || null;
-    }
-  };
-
   const convertCrypto = async () => {
     try {
       setLoading(true);
+      const [fromPrice, toPrice] = await Promise.all([
+        fetchPrice(fromCrypto),
+        fetchPrice(toCrypto),
+      ]);
 
-      const fromCryptoPrice = await fetchPrice(fromCrypto);
-      const toCryptoPrice = await fetchPrice(toCrypto);
-
-      if (fromCryptoPrice && toCryptoPrice) {
-        setConvertedAmount((amount * fromCryptoPrice) / toCryptoPrice);
+      if (fromPrice && toPrice) {
+        setConvertedAmount((amount * fromPrice) / toPrice);
       } else {
         console.error('Erro ao obter informações de preço para a conversão.');
         setConvertedAmount(null);
@@ -101,12 +67,6 @@ const CryptoConverter = () => {
     }
   };
 
-  const formatCurrency = (value) => {
-    return value.toLocaleString('en-US', {
-      minimumFractionDigits: value < 1 ? 8 : 2,
-      maximumFractionDigits: 8,
-    });
-  };
 
   return (
     <div className={styles.container}>
@@ -116,9 +76,14 @@ const CryptoConverter = () => {
         <div className={styles.converterBox}>
           <div className={styles.inputGroup}>
             <label htmlFor="fromCrypto">De:</label>
-            <select id="fromCrypto" value={fromCrypto} onChange={(e) => setFromCrypto(e.target.value)}>
+            <select
+              id="fromCrypto"
+              value={fromCrypto}
+              onChange={(e) => setFromCrypto(e.target.value)}
+              disabled={listLoading && cryptoList.length === 0}
+            >
               <option value="" disabled>
-                Selecione...
+                {listLoading && cryptoList.length === 0 ? 'Carregando...' : 'Selecione...'}
               </option>
               {cryptoList.map((crypto) => (
                 <option key={crypto.id} value={crypto.id}>
@@ -129,9 +94,14 @@ const CryptoConverter = () => {
           </div>
           <div className={styles.inputGroup}>
             <label htmlFor="toCrypto">Para:</label>
-            <select id="toCrypto" value={toCrypto} onChange={(e) => setToCrypto(e.target.value)}>
+            <select
+              id="toCrypto"
+              value={toCrypto}
+              onChange={(e) => setToCrypto(e.target.value)}
+              disabled={listLoading && cryptoList.length === 0}
+            >
               <option value="" disabled>
-                Selecione...
+                {listLoading && cryptoList.length === 0 ? 'Carregando...' : 'Selecione...'}
               </option>
               {cryptoList.map((crypto) => (
                 <option key={crypto.id} value={crypto.id}>
@@ -161,8 +131,8 @@ const CryptoConverter = () => {
         {convertedAmount !== null && !loading && (
           <div className={styles.resultBox}>
             <p>
-              {formatCurrency(amount)} {fromCrypto} é igual a{' '}
-              {formatCurrency(convertedAmount)} {toCrypto}
+              {formatCryptoAmount(amount)} {fromCrypto} é igual a{' '}
+              {formatCryptoAmount(convertedAmount)} {toCrypto}
             </p>
           </div>
         )}

@@ -1,32 +1,17 @@
 // CoinDetails.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import useCoinDetails from '../../hooks/useCoinDetails';
 
-const CoinDetails = ({ params }) => {
-  const [coinDetails, setCoinDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const CoinDetails = () => {
+  const { id } = useParams();
+  const { data: coinDetails, loading, error, fetchDetails } = useCoinDetails();
 
   useEffect(() => {
-    const fetchCoinDetails = async () => {
-      const coinId = params.id;
-      try {
-        const response = await axios.get(
-          `https://api.coingecko.com/api/v3/coins/${coinId}`
-        );
-        setCoinDetails(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Erro ao buscar detalhes da moeda:', error);
-        setError('Erro ao carregar detalhes da moeda. Tente novamente mais tarde.');
-        setLoading(false);
-      }
-    };
-
-    fetchCoinDetails();
-  }, [params.id]);
+    if (id) fetchDetails(id);
+  }, [id, fetchDetails]);
 
   return (
     <div>
@@ -37,10 +22,7 @@ const CoinDetails = ({ params }) => {
       {!loading && !error && coinDetails && (
         <div>
           <h2>{coinDetails.name} ({coinDetails.symbol})</h2>
-          {/* Adicione aqui mais informações detalhadas sobre a moeda */}
         </div>
-        
-        
       )}
       <Footer />
     </div>

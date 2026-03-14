@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls c:/Dev/full-crypto-2.0/.env*)"
+    ]
+  }
+}

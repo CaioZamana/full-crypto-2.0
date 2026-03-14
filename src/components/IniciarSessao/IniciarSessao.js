@@ -27,7 +27,6 @@ const IniciarSessao = () => {
         setErrorMessage('Preencha todos os campos.');
         return;
       }
-      console.log('Autenticando usuário:', username, password);
     } else {
       if (!username || !password || !confirmPassword || !email) {
         setErrorMessage('Preencha todos os campos.');
@@ -37,7 +36,6 @@ const IniciarSessao = () => {
         setErrorMessage('As senhas não coincidem.');
         return;
       }
-      console.log('Cadastrando usuário:', username, password, email);
     }
   };
 

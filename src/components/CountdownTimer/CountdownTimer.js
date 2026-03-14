@@ -12,7 +12,8 @@ const CountdownTimer = () => {
     });
 
     const calculateCountdown = () => {
-        const halvingDate = new Date('May 10, 2024 00:00:00 GMT'); // Coloque a data do próximo halving aqui
+        // Próximo halving estimado: ~20 de abril de 2028 (bloco 1.050.000)
+        const halvingDate = new Date('April 20, 2028 00:00:00 GMT');
         const currentDate = new Date();
         const difference = halvingDate - currentDate;
 
@@ -28,6 +29,8 @@ const CountdownTimer = () => {
                 minutes,
                 seconds,
             });
+        } else {
+            setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         }
     };
 
